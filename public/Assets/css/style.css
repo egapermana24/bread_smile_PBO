@@ -1,0 +1,4 @@
+/* hilangkan dekorasi teks pada tag a */
+a {
+  text-decoration: none;
+}
