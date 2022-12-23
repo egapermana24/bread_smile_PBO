@@ -192,7 +192,8 @@
                 <li class="nav-item">
                   <a href="/produkMasuk" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Pembuatan Kontol</p>
+                    <p>Pembuatan Produk
+                    </p>
                   </a>
                 </li>
                 <li class="nav-item">
