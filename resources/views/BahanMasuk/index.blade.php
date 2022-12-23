@@ -6,7 +6,7 @@
 <div class="container">
   <div class="row">
     <div class="col-12">
-      <a href="{{route ('bahanMasuk.create') }}" class="btn btn-primary mb-3">Tambah</a>
+      <a href="{{route ('bahanMasuk.create') }}" class="btn btn-primary mb-3">Tambah Mmemk</a>
       <table class="table table-bordered">
         <thead>
           <tr>
