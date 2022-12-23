@@ -17,35 +17,35 @@
                     <label for="no_ktp">Nomor KTP</label>
                     <input type="text" class="form-control @error('no_ktp') is-invalid @enderror" id="no_ktp" name="no_ktp" value="{{ $sopir->no_ktp }}" required>
                     @error('no_ktp')
-                        <div class="text-danger mt-2 mx-1">
-                            {{ $message }}
-                        </div>
+                    <div class="text-danger mt-2 mx-1">
+                        {{ $message }}
+                    </div>
                     @enderror
                 </div>
                 <div class="form-group">
                     <label for="nm_sopir">Nama Sopir</label>
-                    <input type="text" class="form-control @error('nm_sopir') is-invalid @enderror" id="nm_sopir" name="nm_sopir" value="{{ $sopir->nm_sopir }}" >
+                    <input type="text" class="form-control @error('nm_sopir') is-invalid @enderror" id="nm_sopir" name="nm_sopir" value="{{ $sopir->nm_sopir }}">
                     @error('nm_sopir')
-                        <div class="text-danger mt-2 mx-1">
-                            {{ $message }}
-                        </div>
+                    <div class="text-danger mt-2 mx-1">
+                        {{ $message }}
+                    </div>
                     @enderror
                 </div>
                 <div class="form-group">
                     <label for="jenis_kelamin">Jenis Kelamin</label>
                     <select class="form-control" name="jenis_kelamin" id="jenis_kelamin">
-                        <option value="{{ $sopir->jenis_kelamin }}" disabled hidden selected>{{ $sopir->jenis_kelamin }}</option>
+                        <option value="{{ $sopir->jenis_kelamin }}" hidden selected>{{ $sopir->jenis_kelamin }}</option>
                         <option value="Laki-laki">Laki-laki</option>
                         <option value="Perempuan">Perempuan</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="alamat">Alamat</label>
-                    <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" >{{ $sopir->alamat }}</textarea>
+                    <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat">{{ $sopir->alamat }}</textarea>
                     @error('alamat')
-                        <div class="text-danger mt-2 mx-1">
-                            {{ $message }}
-                        </div>
+                    <div class="text-danger mt-2 mx-1">
+                        {{ $message }}
+                    </div>
                     @enderror
                 </div>
                 <div class="form-group">
@@ -59,9 +59,9 @@
                         </div>
                     </div>
                     @error('foto')
-                        <div class="text-danger mt-2 mx-1">
-                            {{ $message }}
-                        </div>
+                    <div class="text-danger mt-2 mx-1">
+                        {{ $message }}
+                    </div>
                     @enderror
                 </div>
                 <button type="submit" class="btn btn-primary mb-3">Simpan</button>

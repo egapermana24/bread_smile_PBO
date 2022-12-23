@@ -126,7 +126,7 @@ class SopirController extends Controller
                 'nm_sopir' => 'required|min:3|max:50',
                 'no_ktp' => 'required|min:16|numeric',
                 'jenis_kelamin' => 'required',
-                'alamat' => 'required|min:3'
+                'alamat' => 'required|min:3',
             ]);
 
             $input = $request->all();
