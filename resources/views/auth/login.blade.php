@@ -5,7 +5,7 @@
 <div class="container">
   <div class="row">
 
-    <div class="login-box col-4 mb-5 mx-auto">
+    <div class="login-box col-lg-5 col-md-8 col-sm-11 mb-5 mx-auto">
       <div class="login-logo">
         <b>Silahkan Masuk</b>
       </div>
@@ -64,7 +64,7 @@
             <a href="#" class="btn btn-block btn-primary">
               <i class="fab fa-facebook mr-2"></i> Masuk Menguunakan Facebook
             </a>
-            <a href="#" class="btn btn-block btn-danger">
+            <a href="{{ route('auth.google') }}" class="btn btn-block btn-danger">
               <i class="fab fa-google-plus mr-2"></i> Masuk Menguunakan Google+
             </a>
           </div>

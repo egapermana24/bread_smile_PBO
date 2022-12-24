@@ -5,7 +5,7 @@
 <div class="container">
   <div class="row">
 
-    <div class="register-box col-4 mb-5 mx-auto">
+    <div class="register-box col-lg-5 col-md-8 col-sm-11 mb-5 mx-auto">
       <div class="register-logo">
         <b>Silahkan Mendaftar</b>
       </div>

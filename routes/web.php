@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BahanMasukController;
 use App\Http\Controllers\DataBahanController;
 use App\Http\Controllers\BahanKeluarController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\MobilController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\ProdukJadiController;
@@ -51,4 +52,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/', [RegistrationController::class, 'login'])->name('login');
     Route::get('login', [RegistrationController::class, 'login'])->name('login');
     Route::post('login', [RegistrationController::class, 'loginStore'])->name('login');
+
+    // login dengan google
+    Route::controller(GoogleController::class)->group(function () {
+        Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
+        Route::get('auth/google/callback', 'handleGoogleCallback');
+    });
 });
