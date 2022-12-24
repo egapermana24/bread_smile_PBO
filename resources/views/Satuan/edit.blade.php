@@ -11,7 +11,7 @@
                     @method('PUT')
                     <div class="form-group">
                         <label for="nm_satuan">Nama Satuan</label>
-                        <input type="text" class="form-control" id="nm_satuan" name="nm_satuan" value="{{ $satuan->nm_satuan }}" required>
+                        <input type="text" class="form-control @error('nm_satuan') is-invalid @enderror" id="nm_satuan" name="nm_satuan" value="{{ $satuan->nm_satuan }}" required>
                         @error('nm_satuan')
                             <div class="text-danger mt-2 mx-1">
                                 {{ $message }}

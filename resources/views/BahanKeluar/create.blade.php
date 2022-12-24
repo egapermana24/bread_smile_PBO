@@ -6,24 +6,12 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-5 col-md-6 col-sm-11">
-      <!-- menampilkan pesan gagal -->
-      @if ($errors->any())
-      <div class=" alert alert-danger alert-dismissible fade show col-10 my-2 mx-auto" role="alert">
-        <strong>Upss!</strong> Terjadi masalah<br><br>
-        <ul>
-          @foreach ($errors->all() as $error)
-          <li>{{ $error }}</li>
-          @endforeach
-        </ul>
-        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
-      </div>
-      @endif
       <form action="{{ route('bahanKeluar.store') }}" method="POST">
         @csrf
         <div class="form-group">
           <label for="kd_bahan">Kode Bahan</label>
           <!-- memilih kode bahan dengan javascript -->
-          <select class="form-select" required name="kd_bahan" id="id_barangMasuk" class="form-control" onchange="changeValue(this.value)">
+          <select class="form-select form-control @error('kd_bahan') is-invalid @enderror" name="kd_bahan" id="id_barangMasuk" required onchange="changeValue(this.value)">
             <option value="0" hidden disabled selected>Pilih Kode Bahan</option>
             <?php
             $jsArray = "var prdName = new Array();\n";
@@ -58,16 +46,31 @@
         </div>
         <label for="jumlah">Jumlah</label>
         <div class="form-group input-group">
-          <input type="number" class="form-control" name="jumlah" id="jumlah">
+          <input type="number" class="form-control  @error('jumlah') is-invalid @enderror" name="jumlah" id="jumlah" value="{{ old('jumlah') }}" required>
           <input type="text" class="form-control" id="nm_satuan2" readonly>
+          @error('jumlah')
+            <div class="col-12 text-danger mt-2 mx-1">
+                {{ $message }}
+            </div>
+          @enderror
         </div>
         <div class="form-group">
           <label for="tgl_keluar">Tanggal Keluar</label>
-          <input type="date" class="form-control" name="tgl_keluar" id="tgl_keluar">
+          <input type="date" class="form-control  @error('tgl_keluar') is-invalid @enderror" name="tgl_keluar" id="tgl_keluar" value="{{ old('tgl_keluar') }}" required>
+          @error('tgl_keluar')
+            <div class="text-danger mt-2 mx-1">
+                {{ $message }}
+            </div>
+          @enderror
         </div>
         <div class="form-group">
           <label for="ket">Keterangan</label>
-          <textarea type="text" class="form-control" name="ket" id="ket" placeholder="Masukkan Keterangan"></textarea>
+          <textarea type="text" class="form-control  @error('ket') is-invalid @enderror" name="ket" id="ket" placeholder="Masukkan Keterangan" required>{{ old('ket') }}</textarea>
+          @error('ket')
+            <div class="text-danger mt-2 mx-1">
+                {{ $message }}
+            </div>
+          @enderror
         </div>
         <button type="submit" class="btn btn-primary mb-3">Simpan</button>
         <button type="reset" class="btn btn-danger mb-3">Reset</button>
