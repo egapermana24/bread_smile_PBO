@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        // cara menyesuaikan timestamp agar sesuai dengan negara indonesia
     ];
 
     /**

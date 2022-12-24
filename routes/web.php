@@ -7,6 +7,7 @@ use App\Http\Controllers\BahanKeluarController;
 use App\Http\Controllers\MobilController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\ProdukJadiController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ResepController;
 use App\Http\Controllers\SopirController;
 
@@ -17,13 +18,17 @@ use App\Http\Controllers\SopirController;
 |
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| contains the "web" middleware group. Now create something great! 
 |
 */
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Register
+Route::get('/register', [RegistrationController::class, 'index'])->name('register');
+Route::post('register', [RegistrationController::class, 'store'])->name('register');
 
 // mengarah ke setiap controller
 Route::resource('dataBahan', DataBahanController::class);
