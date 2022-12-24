@@ -94,6 +94,9 @@ class SopirController extends Controller
         // cek apakah user mengganti foto atau tidak
         if ($request->has('foto')) {
 
+            // hapus foto lama
+            $sopir = Sopir::find($id);
+            File::delete('images/' . $sopir->foto);
             $request->validate([
                 'kd_sopir' => 'required',
                 'nm_sopir' => 'required|min:3|max:50',
@@ -103,6 +106,8 @@ class SopirController extends Controller
                 'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
             ]);
 
+            $input = $request->all();
+
             if ($image = $request->file('foto')) {
                 $destinationPath = 'images/';
                 $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
@@ -110,14 +115,8 @@ class SopirController extends Controller
                 $input['foto'] = "$profileImage";
             }
 
-            $input = $request->all();
-            // dd($input);
-
             $sopir = Sopir::find($id);
             $sopir->update($input);
-
-            // hapus foto lama
-            File::delete('images/' . $sopir->foto);
 
             return redirect()->route('sopir.index')->with('success', 'Data Berhasil Diubah');
         } else {

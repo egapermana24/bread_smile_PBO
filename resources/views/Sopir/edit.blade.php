@@ -51,10 +51,10 @@
                 <div class="form-group">
                     <label for="foto">Foto</label>
                     <div class="card" style="width: 10rem;">
-                        <img src="{{ asset('images/'.$sopir->foto) }}" class="card-img-top" alt="Foto Kamar">
+                        <img src="{{ asset('images/'.$sopir->foto) }}" class="card-img-top" alt="Foto Kamar" id="output">
                         <div class="card-body">
                             <p class="card-text">
-                                <input type="file" class="form-control" id="foto" name="foto" value="{{ $sopir->foto }}">
+                                <input type="file" class="form-control @error('foto') is-invalid @enderror mx-2" id="foto" name="foto" value="{{ old('foto') }}" accept="image/*" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])">
                             </p>
                         </div>
                     </div>
