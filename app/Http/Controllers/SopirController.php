@@ -138,6 +138,9 @@ class SopirController extends Controller
 
     public function destroy(Sopir $sopir)
     {
-        //
+        // menghapus foto berdasarkan id
+        File::delete('images/' . $sopir->foto);
+        $sopir->delete();
+        return redirect()->route('sopir.index')->with('success', 'Data Berhasil Dihapus');
     }
 }
