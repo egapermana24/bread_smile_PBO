@@ -22,20 +22,33 @@ use App\Http\Controllers\SopirController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// kalo mau nambahin route baru, tinggal tambahin di grup ini, soalnya yang ini harus login dulu
+Route::middleware('auth')->group(function () {
+    // Dashboard
+    Route::get('dashboard', function () {
+        return view('dashboard', ['tittle' => 'Dashboard', 'judul' => 'Dashboard', 'menu' => 'Dashboard', 'submenu' => 'Dashboard']);
+    });
+    // logout
+    Route::post('logout', [RegistrationController::class, 'logout'])->name('logout');
+    // mengarah ke setiap controller
+    Route::resource('dataBahan', DataBahanController::class);
+    Route::resource('bahanMasuk', BahanMasukController::class);
+    Route::resource('bahanKeluar', BahanKeluarController::class);
+    Route::resource('satuan', SatuanController::class);
+    Route::resource('produkJadi', ProdukJadiController::class);
+    Route::resource('resep', ResepController::class);
+    Route::resource('sopir', SopirController::class);
+    Route::resource('mobil', MobilController::class);
 });
 
-// Register
-Route::get('/register', [RegistrationController::class, 'index'])->name('register');
-Route::post('register', [RegistrationController::class, 'store'])->name('register');
 
-// mengarah ke setiap controller
-Route::resource('dataBahan', DataBahanController::class);
-Route::resource('bahanMasuk', BahanMasukController::class);
-Route::resource('bahanKeluar', BahanKeluarController::class);
-Route::resource('satuan', SatuanController::class);
-Route::resource('produkJadi', ProdukJadiController::class);
-Route::resource('resep', ResepController::class);
-Route::resource('sopir', SopirController::class);
-Route::resource('mobil', MobilController::class);
+// yang ini soalnya buat route yang bisa diakses tanpa login
+Route::middleware('guest')->group(function () {
+    // Register
+    Route::get('register', [RegistrationController::class, 'index'])->name('register');
+    Route::post('register', [RegistrationController::class, 'store'])->name('register');
+    // Login
+    Route::get('/', [RegistrationController::class, 'login'])->name('login');
+    Route::get('login', [RegistrationController::class, 'login'])->name('login');
+    Route::post('login', [RegistrationController::class, 'loginStore'])->name('login');
+});

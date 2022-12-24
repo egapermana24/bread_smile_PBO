@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RegistrationController extends Controller
 {
@@ -53,5 +54,53 @@ class RegistrationController extends Controller
         User::create($input);
 
         return redirect('login')->with('status', 'Registrasi Berhasil, Silahkan Login!');
+    }
+
+    public function login()
+    {
+        return view(
+            'auth.login',
+            [
+                'tittle' => '',
+                'judul' => '',
+                'menu' => '',
+                'submenu' => ''
+            ]
+        );
+    }
+
+    public function loginStore(Request $request)
+    {
+        $messages = [
+            'email.required' => 'Email tidak boleh kosong',
+            'email.email' => 'Email tidak valid',
+            'password.required' => 'Password tidak boleh kosong',
+        ];
+
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ], $messages);
+
+        $credentials = $request->only('email', 'password');
+
+        // pesan error jika email dan password tidak sesuai dengan data di database
+
+        if (auth()->attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect()->intended('dashboard');
+        }
+
+        return back()->withErrors([
+            'email' => 'Email yang kamu masukan salah',
+            'password' => 'Password yang kamu masukan salah',
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect()->route('login')->with('success', 'Logout Berhasil');
     }
 }

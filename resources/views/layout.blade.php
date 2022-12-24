@@ -33,6 +33,7 @@
   <link rel="stylesheet" href="{{ asset('Assets/css/style.css')}}">
 </head>
 
+
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
 
@@ -55,13 +56,22 @@
         <!-- Navbar Search -->
         <li class="nav-item">
         <li class="nav-item d-none d-sm-inline-block">
+          @if (!Auth::check())
           <a href="/register" class="nav-link">Register</a>
+          @endif
         </li>
         <li class="nav-item d-none d-sm-inline-block">
+          @if (!Auth::check())
           <a href="/login" class="nav-link">Login</a>
+          @endif
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-          <a href="/logout" class="nav-link">Logout</a>
+          @if (Auth::check())
+          <form action="/logout" method="POST">
+            @csrf
+            <a class="nav-link"><button class="text-secondary" style="border: none; background:none;" type="submit">Logout</button></a>
+          </form>
+          @endif
         </li>
         </li>
       </ul>
@@ -87,6 +97,7 @@
             <a href="#" class="d-block">Administrator</a>
           </div>
         </div>
+
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">

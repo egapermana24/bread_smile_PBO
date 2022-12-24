@@ -14,11 +14,11 @@
         <div class="card-body register-card-body">
           <p class="login-box-msg">Masukkan datamu dengan benar</p>
 
-          <form action="/register" method="post" class="needs-validation" novalidate>
+          <form action="/register" method="post" class="needs-validation">
             @csrf
             <div class="input-group">
 
-              <input type="text" class="form-control @error('name') is-invalid @enderror)" placeholder="Nama Lengkap" name="name" value="{{ old('name') }}">
+              <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Nama Lengkap" name="name" value="{{ old('name') }}">
               <div class="input-group-append">
                 <div class="input-group-text">
                   <span class="fas fa-user"></span>
