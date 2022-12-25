@@ -13,12 +13,14 @@
           <!-- memilih kode bahan dengan javascript -->
           <select class="form-select form-control @error('kd_bahan') is-invalid @enderror" name="kd_bahan" id="id_barangMasuk" required onchange="changeValue(this.value)">
             <option value="0" hidden disabled selected>Pilih Kode Bahan</option>
-            <?php
-            $jsArray = "var prdName = new Array();\n";
-            foreach ($dataBahan as $bahan) { ?>
-              <option value="<?= "$bahan[kd_bahan]" ?>"><?= $bahan['kd_bahan']; ?> [<?= $bahan['nm_bahan']; ?>]</option>
-            <?php
-              $jsArray .= "prdName['" . $bahan['kd_bahan'] . "']= {
+            @php
+                $jsArray = "var prdName = new Array();\n";
+            @endphp
+            @foreach ($dataBahan as $bahan)
+                <option value="{{ $bahan->kd_bahan }}">{{ $bahan->kd_bahan }} - {{ $bahan->nm_bahan }} </option>
+
+                @php
+                    $jsArray .= "prdName['" . $bahan['kd_bahan'] . "']= {
                           nm_bahan : '" . addslashes($bahan['nm_bahan']) . "',
                           harga_beli : '" . addslashes($bahan['harga_beli']) . "',
                           harga_beliTampil : '" . addslashes('Rp. ' . number_format($bahan['harga_beli'])) . "',
@@ -27,7 +29,9 @@
                           nm_satuan2 : '" . addslashes($bahan['nm_satuan']) . "',
 
                         };\n";
-            } ?>
+                @endphp
+                
+            @endforeach
           </select>
         </div>
         <div class="form-group">
