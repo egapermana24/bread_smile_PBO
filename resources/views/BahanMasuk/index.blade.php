@@ -37,7 +37,7 @@
               <form action="{{ route('bahanMasuk.destroy', $masuk->id_bahanMasuk) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
               </form>
             </td>
           </tr>

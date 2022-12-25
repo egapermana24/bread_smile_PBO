@@ -118,7 +118,7 @@ class SopirController extends Controller
             $sopir = Sopir::find($id);
             $sopir->update($input);
 
-            return redirect()->route('sopir.index')->with('success', 'Data Berhasil Diubah');
+            return redirect()->route('sopir.index')->with('status', 'Data Berhasil Diubah');
         } else {
             $request->validate([
                 'kd_sopir' => 'required',
@@ -132,7 +132,7 @@ class SopirController extends Controller
 
             $sopir = Sopir::find($id);
             $sopir->update($input);
-            return redirect()->route('sopir.index')->with('success', 'Data Berhasil Diubah');
+            return redirect()->route('sopir.index')->with('status', 'Data Berhasil Diubah');
         }
     }
 
@@ -141,6 +141,6 @@ class SopirController extends Controller
         // menghapus foto berdasarkan id
         File::delete('images/' . $sopir->foto);
         $sopir->delete();
-        return redirect()->route('sopir.index')->with('success', 'Data Berhasil Dihapus');
+        return redirect()->route('sopir.index')->with('status', 'Data Berhasil Dihapus');
     }
 }
