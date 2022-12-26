@@ -9,11 +9,7 @@ use Illuminate\Http\Request;
 
 class BahanKeluarController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         // join table bahan keluar dan data bahan
@@ -22,14 +18,19 @@ class BahanKeluarController extends Controller
             ->get();
 
         // mengirim tittle dan judul ke view
-        return view('bahanKeluar.index', ['bahanKeluar' => $bahanKeluar], ['tittle' => 'Pemakaian Bahan', 'judul' => 'Pemakaian Bahan', 'menu' => 'Bahan Baku', 'submenu' => 'Pemakaian Bahan']);
+        return view(
+            'bahanKeluar.index',
+            ['bahanKeluar' => $bahanKeluar],
+            [
+                'tittle' => 'Pemakaian Bahan',
+                'judul' => 'Pemakaian Bahan',
+                'menu' => 'Bahan Baku',
+                'submenu' => 'Pemakaian Bahan'
+            ]
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         // join dengan tabel satuan
@@ -37,15 +38,19 @@ class BahanKeluarController extends Controller
             ->select('databahan.*', 'satuan.nm_satuan')
             ->get();
 
-        return view('bahanKeluar.create', ['dataBahan' => $dataBahan], ['tittle' => 'Pemakaian Bahan', 'judul' => 'Pemakaian Bahan', 'menu' => 'Bahan Baku', 'submenu' => 'Pemakaian Bahan']);
+        return view(
+            'bahanKeluar.create',
+            ['dataBahan' => $dataBahan],
+            [
+                'tittle' => 'Pemakaian Bahan',
+                'judul' => 'Pemakaian Bahan',
+                'menu' => 'Bahan Baku',
+                'submenu' => 'Pemakaian Bahan'
+            ]
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         // stok bahan berkurang
@@ -80,48 +85,118 @@ class BahanKeluarController extends Controller
         return redirect('/bahanKeluar')->with('status', 'Data berhasil ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\bahanKeluar  $bahanKeluar
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(bahanKeluar $bahanKeluar)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\bahanKeluar  $bahanKeluar
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(bahanKeluar $bahanKeluar)
     {
-        //
+        // join dengan tabel satuan
+        $dataBahan = DataBahan::join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')
+            ->select('databahan.*', 'satuan.nm_satuan')
+            ->get();
+
+        return view(
+            'bahanKeluar.edit',
+            compact('bahanKeluar', 'dataBahan'),
+            [
+                'tittle' => 'Edit Data',
+                'judul' => 'Edit Data Pemakaian Bahan',
+                'menu' => 'Bahan Baku',
+                'submenu' => 'Edit Data'
+            ]
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\bahanKeluar  $bahanKeluar
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, bahanKeluar $bahanKeluar)
     {
-        //
+        // cek apakah bahannya di ubah
+        if ($request->has('kd_bahan')) {
+
+            // mengembalikan stok bahan yg lama 
+            $stok = DataBahan::where('kd_bahan', $bahanKeluar->kd_bahan)->first();
+            $stok->stok = $stok->stok + $bahanKeluar->jumlah;
+            $stok->save();
+
+            // update stok bahan baru
+            $stok = DataBahan::where('kd_bahan', $request->kd_bahan)->first();
+            $stok->stok = $stok->stok - $request->jumlah;
+            $stok->save();
+
+            // merubah harga_beli dan jumlah menjadi integer
+            $harga_beli = (int) $stok->harga_beli;
+            $jumlah = (int) $request->jumlah;
+
+            $request->validate([
+                'kd_bahan' => 'required',
+                'jumlah' => 'required',
+                'tgl_keluar' => 'required',
+                'ket' => 'required|min:3',
+            ]);
+
+            $input = $request->all();
+
+            // mencari total harga
+            $total = $harga_beli * $jumlah;
+            $input['total'] = $total;
+
+            $bahanKeluar->update($input);
+
+            return redirect()->route('bahanKeluar.index')
+                ->with('status', 'Data Berhasil Diubah!');
+        } else {
+            $request->validate([
+                'kd_bahan' => 'required',
+                'jumlah' => 'required',
+                'tgl_keluar' => 'required',
+                'ket' => 'required|min:3',
+            ]);
+
+            // cek apakah jumlah diubah
+            if ($request->has('jumlah')) {
+
+                // update stok bahan 
+                $stok = DataBahan::where('kd_bahan', $request->kd_bahan)->first();
+                $stok->stok = $stok->stok - $request->jumlah;
+                $stok->save();
+
+                // merubah harga_beli dan jumlah menjadi integer
+                $harga_beli = (int) $stok->harga_beli;
+                $jumlah = (int) $request->jumlah;
+
+                $input = $request->all();
+
+                // mencari total harga
+                $total = $harga_beli * $jumlah;
+                $input['total'] = $total;
+
+                $bahanKeluar->update($input);
+
+                return redirect()->route('bahanKeluar.index')
+                    ->with('status', 'Data Berhasil Diubah!');
+            } else {
+                $input = $request->all();
+                $bahanKeluar->update($input);
+
+                return redirect()->route('bahanKeluar.index')
+                    ->with('status', 'Data Berhasil Diubah!');
+            }
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\bahanKeluar  $bahanKeluar
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(bahanKeluar $bahanKeluar)
     {
-        //
+        // update stok bahan
+        $stok = DataBahan::where('kd_bahan', $bahanKeluar->kd_bahan)->first();
+        $stok->stok = $stok->stok + $bahanKeluar->jumlah;
+        $stok->save();
+
+        $bahanKeluar->delete();
+        return redirect()->route('bahanKeluar.index')->with('status', 'Data Berhasil Dihapus');
     }
 }

@@ -11,7 +11,7 @@
         <div class="form-group">
           <label for="kd_bahan">Kode Bahan</label>
           <!-- memilih kode bahan dengan javascript -->
-          <select name="kd_bahan" id="id_barangMasuk" class="form-select form-control @error('kd_bahan') is-invalid @enderror" required onchange="changeValue(this.value)">
+          <select name="kd_bahan" class="form-select form-control @error('kd_bahan') is-invalid @enderror" required onchange="changeValue(this.value)">
             <option value="0" hidden disabled selected>Pilih Kode Bahan</option>
             @php
                 $jsArray = "var prdName = new Array();\n";

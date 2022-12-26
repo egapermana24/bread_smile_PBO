@@ -2,7 +2,7 @@
 
 @section('content')
 
-<!-- halaman create data bahan -->
+<!-- halaman create data bahan keluar-->
 <div class="container">
   <div class="row">
     <div class="col-lg-5 col-md-6 col-sm-11">
@@ -11,7 +11,7 @@
         <div class="form-group">
           <label for="kd_bahan">Kode Bahan</label>
           <!-- memilih kode bahan dengan javascript -->
-          <select class="form-select form-control @error('kd_bahan') is-invalid @enderror" name="kd_bahan" id="id_barangMasuk" required onchange="changeValue(this.value)">
+          <select class="form-select form-control @error('kd_bahan') is-invalid @enderror" name="kd_bahan" required onchange="changeValue(this.value)">
             <option value="0" hidden disabled selected>Pilih Kode Bahan</option>
             @php
                 $jsArray = "var prdName = new Array();\n";

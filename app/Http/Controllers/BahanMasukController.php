@@ -108,7 +108,7 @@ class BahanMasukController extends Controller
             // ['dataBahan' => $dataBahan],
             [
                 'tittle' => 'Edit Data',
-                'judul' => 'Edit Data Pmebelian Bahan',
+                'judul' => 'Edit Data Pembelian Bahan',
                 'menu' => 'Bahan Baku',
                 'submenu' => 'Edit Data'
             ]
