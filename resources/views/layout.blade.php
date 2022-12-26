@@ -105,7 +105,7 @@
             <!-- Add icons to the links using the .nav-icon class
               with font-awesome or any other icon font library -->
             <li class="nav-item">
-              <a href="/dashboard" class="nav-link">
+              <a href="/dashboard" class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Dashboard
@@ -114,8 +114,16 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="/satuan" class="nav-link {{ Request::is('satuan*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  Satuan Massa
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
               <!-- bahan baku -->
-              <a href="#" class="nav-link">
+              <a href="#" class="nav-link {{ Request::is('dataBahan*', 'bahanMasuk*', 'bahanKeluar*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>
                   Bahan Baku
@@ -125,25 +133,19 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/satuan" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Satuan Massa</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/dataBahan" class="nav-link">
+                  <a href="/dataBahan" class="nav-link {{ Request::is('dataBahan*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Data Bahan</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/bahanMasuk" class="nav-link">
+                  <a href="/bahanMasuk" class="nav-link {{ Request::is('bahanMasuk*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pembelian Bahan</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/bahanKeluar" class="nav-link">
+                  <a href="/bahanKeluar" class="nav-link {{ Request::is('bahanKeluar*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pemakaian Bahan</p>
                   </a>
@@ -152,7 +154,7 @@
             </li>
             <li class="nav-item">
               <!-- Produk -->
-              <a href="#" class="nav-link">
+              <a href="#" class="nav-link {{ Request::is('resep*', 'produkJadi*', 'produkMasuk*', 'produkKeluar*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>
                   Produk
@@ -162,25 +164,25 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/resep" class="nav-link">
+                  <a href="/resep" class="nav-link {{ Request::is('resep*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Resep Produk</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/produkJadi" class="nav-link">
+                  <a href="/produkJadi" class="nav-link {{ Request::is('produkJadi*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Data Produk</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/produkMasuk" class="nav-link">
+                  <a href="/produkMasuk" class="nav-link {{ Request::is('produkMasuk*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pembuatan Produk</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/produkKeluar" class="nav-link">
+                  <a href="/produkKeluar" class="nav-link {{ Request::is('produkKeluar*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Penjualan Produk</p>
                   </a>
@@ -189,7 +191,7 @@
             </li>
             <li class="nav-item">
               <!-- Laporan -->
-              <a href="#" class="nav-link">
+              <a href="#" class="nav-link {{ Request::is('mobil*', 'sopir*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>
                   Pengiriman
@@ -199,13 +201,13 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/mobil" class="nav-link">
+                  <a href="/mobil" class="nav-link {{ Request::is('mobil*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Mobil</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/sopir" class="nav-link">
+                  <a href="/sopir" class="nav-link {{ Request::is('sopir*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Sopir</p>
                   </a>
@@ -214,7 +216,7 @@
             </li>
             <li class="nav-item">
               <!-- Laporan -->
-              <a href="#" class="nav-link">
+              <a href="#" class="nav-link {{ Request::is('lapPermintaanBahan*', 'lapPermintaanProduk*', 'lapPengirimanProduk*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>
                   Laporan
@@ -224,19 +226,19 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/resep" class="nav-link">
+                  <a href="/lapPermintaanBahan" class="nav-link {{ Request::is('lapPermintaanBahan*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Permintaan Bahan</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/produkJadi" class="nav-link">
+                  <a href="/lapPermintaanProduk" class="nav-link {{ Request::is('lapPermintaanProduk*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Permintaan Produk</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/produkMasuk" class="nav-link">
+                  <a href="/lapPengirimanProduk" class="nav-link {{ Request::is('lapPengirimanProduk*') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pengiriman Produk</p>
                   </a>
