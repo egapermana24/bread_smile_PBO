@@ -22,9 +22,9 @@
 
             <!-- menampilkan pesan berhasil -->
             @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
             @endif
 
             <a href="{{ route('sopir.create') }}" class="btn btn-primary mb-3">Tambah</a>
