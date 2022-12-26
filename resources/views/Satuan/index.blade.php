@@ -5,7 +5,7 @@
 <!-- halaman tampil data satuan -->
 <div class="container">
   <div class="row">
-    <div class="col-4 table-responsive">
+    <div class="col-3 table-responsive">
 
       <!-- menampilkan pesan gagal -->
       @if ($errors->any())
@@ -44,7 +44,7 @@
           @foreach ($satuan as $sat)
           <tr>
             <td>{{ $sat->nm_satuan }}</td>
-            <td>
+            <td width="100px">
               <a href="{{ route('satuan.edit',$sat->id_satuan) }}" class="btn btn-sm btn-warning">Edit</a>
               <form action="{{ route('satuan.destroy', $sat->id_satuan) }}" method="POST">
                 @csrf
@@ -56,7 +56,7 @@
           @endforeach
         </tbody>
       </table>
-      
+
     </div>
   </div>
 </div>

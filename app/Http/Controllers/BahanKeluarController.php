@@ -94,10 +94,11 @@ class BahanKeluarController extends Controller
 
     public function edit(bahanKeluar $bahanKeluar)
     {
-        // join dengan tabel satuan
+        // join tabel satuan
         $dataBahan = DataBahan::join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')
             ->select('databahan.*', 'satuan.nm_satuan')
-            ->get();
+            ->where('kd_bahan', $bahanKeluar->kd_bahan)
+            ->first();
 
         return view(
             'bahanKeluar.edit',
