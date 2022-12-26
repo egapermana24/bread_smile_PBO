@@ -72,14 +72,18 @@ class MobilController extends Controller
 
     public function update(Request $request, Mobil $mobil)
     {
-        $request->validate([
+        $rules = [
             'kd_mobil' => 'required',
             'merk' => 'required',
-            'plat_nomor' => 'required',
             'ket' => 'required'
-        ]);
+        ];
 
-        $mobil->update($request->all());
+        if ($request->plat_nomor != $mobil->plat_nomor) {
+            $rules['plat_nomor'] = 'required|unique:mobil,plat_nomor';
+        };
+
+        $validateData = $request->validate($rules);
+        $mobil->update($validateData);
         return redirect()->route('mobil.index')
             ->with('status', 'Data Berhasil Diubah!');
     }
