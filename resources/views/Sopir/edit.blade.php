@@ -50,7 +50,7 @@
 
                 <div class="form-group">
                     <label for="alamat">Alamat</label>
-                    <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat">{{ old('alamat', $sopir->alamat) }}</textarea>
+                    <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" >{{ old('alamat', $sopir->alamat) }}</textarea>
                     @error('alamat')
                         <div class="text-danger mt-2 mx-1">
                             {{ $message }}
