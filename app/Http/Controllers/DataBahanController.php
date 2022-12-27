@@ -6,6 +6,10 @@ use App\Models\DataBahan;
 use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Alert;
+// sweetalert
+use App\Config\sweetalert;
+
 
 class DataBahanController extends Controller
 {
@@ -52,7 +56,8 @@ class DataBahanController extends Controller
 
         DataBahan::create($request->all());
 
-        return redirect('/dataBahan')->with('status', 'Data Bahan Berhasil Ditambahkan!');
+        Alert::success('Data Bahan', 'Berhasil Ditambahkan!');
+        return redirect('/dataBahan');
     }
 
     public function show(DataBahan $dataBahan)
@@ -85,14 +90,21 @@ class DataBahanController extends Controller
         ]);
 
         $dataBahan->update($request->all());
-        return redirect()->route('dataBahan.index')
-            ->with('status', 'Data Berhasil Diubah!');
+
+        Alert::success('Data Bahan', 'Berhasil diubah!');
+        return redirect('/dataBahan');
     }
 
-    public function destroy(DataBahan $dataBahan)
+    public function destroy(DataBahan $dataBahan, Request $request)
     {
-        // hapus data berdasarkan id
-        DataBahan::destroy($dataBahan->kd_bahan);
-        return redirect('dataBahan')->with('status', 'Data Bahan Berhasil Dihapus!');
+        Alert::question('Apakah yakin untuk menghapus data?', 'Data yang dihapus tidak dapat dikembalikan!');
+        if (Alert::question() == true) {
+            // DataBahan::destroy($dataBahan->kd_bahan);
+            Alert::success('Data Bahan', 'Berhasil dihapus!');
+            return redirect('/dataBahan');
+        } else {
+            Alert::info('Data Bahan', 'Tidak jadi dihapus!');
+            return redirect('/dataBahan');
+        }
     }
 }

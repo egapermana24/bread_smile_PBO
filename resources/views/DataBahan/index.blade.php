@@ -39,7 +39,7 @@
               <form action="{{ route('dataBahan.destroy', $bahan->kd_bahan) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
+                <button type="submit" class="btn btn-sm btn-danger show_confirm">Hapus</button>
               </form>
             </td>
           </tr>
@@ -49,5 +49,4 @@
     </div>
   </div>
 </div>
-
 @endsection
