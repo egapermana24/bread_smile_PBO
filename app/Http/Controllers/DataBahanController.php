@@ -97,14 +97,9 @@ class DataBahanController extends Controller
 
     public function destroy(DataBahan $dataBahan, Request $request)
     {
-        Alert::question('Apakah yakin untuk menghapus data?', 'Data yang dihapus tidak dapat dikembalikan!');
-        if (Alert::question() == true) {
-            // DataBahan::destroy($dataBahan->kd_bahan);
-            Alert::success('Data Bahan', 'Berhasil dihapus!');
-            return redirect('/dataBahan');
-        } else {
-            Alert::info('Data Bahan', 'Tidak jadi dihapus!');
-            return redirect('/dataBahan');
-        }
+
+        $dataBahan->delete('kd_bahan', $request->kd_bahan);
+        Alert::success('Data Bahan', 'Berhasil dihapus!');
+        return redirect('/dataBahan');
     }
 }
