@@ -11,6 +11,8 @@ use App\Http\Controllers\ProdukJadiController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ResepController;
 use App\Http\Controllers\SopirController;
+use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\KaryawanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('resep', ResepController::class);
     Route::resource('sopir', SopirController::class);
     Route::resource('mobil', MobilController::class);
+    Route::resource('jabatan', JabatanController::class);
+    Route::resource('karyawan', KaryawanController::class);
 });
 
 

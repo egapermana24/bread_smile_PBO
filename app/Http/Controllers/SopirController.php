@@ -49,7 +49,7 @@ class SopirController extends Controller
         $request->validate([
             'kd_sopir' => 'required',
             'nm_sopir' => 'required|min:3|max:50',
-            'no_ktp' => 'required|min:16|unique:sopir,no_ktp|numeric',
+            'no_ktp' => 'required|min:16|max:16|unique:sopir,no_ktp|numeric',
             'jenis_kelamin' => 'required',
             'alamat' => 'required|min:3',
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
@@ -106,7 +106,7 @@ class SopirController extends Controller
             ];
 
             if ($request->no_ktp != $sopir->no_ktp) {
-                $rules['no_ktp'] = 'required|unique:sopir,no_ktp|numeric';
+                $rules['no_ktp'] = 'required|min:16|max:16|unique:sopir,no_ktp|numeric';
             };
 
             $input = $request->validate($rules);
@@ -125,7 +125,6 @@ class SopirController extends Controller
             $rules = [
                 'kd_sopir' => 'required',
                 'nm_sopir' => 'required|min:3|max:50',
-                'no_ktp' => 'required|min:16|numeric',
                 'jenis_kelamin' => 'required',
                 'alamat' => 'required|min:3',
             ];
@@ -133,7 +132,7 @@ class SopirController extends Controller
             $sopir = Sopir::find($id);
 
             if ($request->no_ktp != $sopir->no_ktp) {
-                $rules['no_ktp'] = 'required|unique:sopir,no_ktp|numeric';
+                $rules['no_ktp'] = 'required|min:16|max:16|unique:sopir,no_ktp|numeric';
             };
 
             $input = $request->validate($rules);
