@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Jabatan;
+use Illuminate\Http\Request;
+
+class JabatanController extends Controller
+{
+
+    public function index()
+    {
+        // mengirim tittle dan judul ke view
+        return view(
+            'jabatan.index',
+            [
+                'jabatan' => Jabatan::all(),
+                'tittle' => 'Data Jabatan',
+                'judul' => 'Data Jabatan',
+                'menu' => 'Data Jabatan',
+                'submenu' => 'Data Jabatan'
+            ]
+        );
+    }
+
+
+    public function store(Request $request)
+    {
+        // mengubah error ke bahasa indonesia
+        $messages = [
+            'required' => ':attribute tidak boleh kosong',
+        ];
+
+        $errors = [
+            'nm_jabatan' => 'Nama Jabatan',
+        ];
+
+        // validasi data
+        $request->validate([
+            'nm_jabatan' => 'required',
+        ], $messages, $errors);
+
+
+
+        Jabatan::create($request->all());
+
+        return redirect('jabatan')->with('status', 'Data Jabatan Berhasil Ditambahkan!');
+    }
+
+
+    public function show($id)
+    {
+        //
+    }
+
+
+    public function edit(Jabatan $jabatan)
+    {
+        return view(
+            'jabatan.edit',
+            compact('jabatan'),
+            [
+                'tittle' => 'Edit Data Jabatan',
+                'judul' => 'Edit Data Jabatan',
+                'menu' => 'Data Jabatan',
+                'submenu' => 'Edit Data Jabatan'
+            ]
+        );
+    }
+
+
+    public function update(Request $request, Jabatan $jabatan)
+    {
+        $request->validate([
+            'nm_jabatan' => 'required'
+        ]);
+
+        $jabatan->update($request->all());
+        return redirect()->route('jabatan.index')
+            ->with('status', 'Data Berhasil Diubah!');
+    }
+
+
+    public function destroy(Jabatan $jabatan)
+    {
+        $jabatan->delete();
+        return redirect()->route('jabatan.index')
+            ->with('status', 'Data Berhasil Dihapus.');
+    }
+}

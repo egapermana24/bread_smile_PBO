@@ -50,7 +50,7 @@ class SopirController extends Controller
         $request->validate([
             'kd_sopir' => 'required',
             'nm_sopir' => 'required|min:3|max:50',
-            'no_ktp' => 'required|min:16|unique:sopir,no_ktp|numeric',
+            'no_ktp' => 'required|min:16|max:16|unique:sopir,no_ktp|numeric',
             'jenis_kelamin' => 'required',
             'alamat' => 'required|min:3',
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
@@ -99,16 +99,19 @@ class SopirController extends Controller
             // hapus foto lama
             $sopir = Sopir::find($id);
             File::delete('images/' . $sopir->foto);
-            $request->validate([
+            $rules = [
                 'kd_sopir' => 'required',
                 'nm_sopir' => 'required|min:3|max:50',
-                'no_ktp' => 'required|min:16|numeric',
                 'jenis_kelamin' => 'required',
                 'alamat' => 'required|min:3',
                 'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
-            ]);
+            ];
 
-            $input = $request->all();
+            if ($request->no_ktp != $sopir->no_ktp) {
+                $rules['no_ktp'] = 'required|min:16|max:16|unique:sopir,no_ktp|numeric';
+            };
+
+            $input = $request->validate($rules);
 
             if ($image = $request->file('foto')) {
                 $destinationPath = 'images/';
@@ -117,23 +120,26 @@ class SopirController extends Controller
                 $input['foto'] = "$profileImage";
             }
 
-            $sopir = Sopir::find($id);
             $sopir->update($input);
 
             Alert::success('Data Sopir', 'Berhasil diubah!');
             return redirect('sopir');
         } else {
-            $request->validate([
+            $rules = [
                 'kd_sopir' => 'required',
                 'nm_sopir' => 'required|min:3|max:50',
-                'no_ktp' => 'required|min:16|numeric',
                 'jenis_kelamin' => 'required',
                 'alamat' => 'required|min:3',
-            ]);
-
-            $input = $request->all();
+            ];
 
             $sopir = Sopir::find($id);
+
+            if ($request->no_ktp != $sopir->no_ktp) {
+                $rules['no_ktp'] = 'required|min:16|max:16|unique:sopir,no_ktp|numeric';
+            };
+
+            $input = $request->validate($rules);
+
             $sopir->update($input);
             Alert::success('Data Sopir', 'Berhasil diubah!');
             return redirect('sopir');

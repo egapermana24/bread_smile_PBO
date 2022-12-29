@@ -44,10 +44,10 @@ class BahanMasukController extends Controller
             'bahanMasuk.create',
             ['dataBahan' => $dataBahan],
             [
-                'tittle' => 'Pembelian Bahan',
-                'judul' => 'Pembelian Bahan',
+                'tittle' => 'Tambah Data',
+                'judul' => 'Tambah Pembelian Bahan',
                 'menu' => 'Bahan Baku',
-                'submenu' => 'Pembelian Bahan'
+                'submenu' => 'Tambah Data'
             ]
         );
     }
@@ -98,10 +98,12 @@ class BahanMasukController extends Controller
 
     public function edit(bahanMasuk $bahanMasuk)
     {
-        // join dengan tabel satuan
+
+        // join tabel satuan
         $dataBahan = DataBahan::join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')
             ->select('databahan.*', 'satuan.nm_satuan')
-            ->get();
+            ->where('kd_bahan', $bahanMasuk->kd_bahan)
+            ->first();
 
         return view(
             'bahanMasuk.edit',

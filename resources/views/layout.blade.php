@@ -114,6 +114,22 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="/jabatan" class="nav-link {{ Request::is('jabatan*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  Jabatan
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/karyawan" class="nav-link {{ Request::is('karyawan*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  Data Karyawan
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="/satuan" class="nav-link {{ Request::is('satuan*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>
