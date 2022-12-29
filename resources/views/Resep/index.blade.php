@@ -2,10 +2,6 @@
 @extends('layout')
 
 @section('content')
-@php
-$dataBahan = $resep->keyBy('id')->toArray();
-dd($dataBahan)
-@endphp
 <!-- halaman index data bahan -->
 <div class="container">
   <div class="row">
@@ -33,14 +29,7 @@ dd($dataBahan)
           <tr>
             <td>{{ $r->kd_resep }}</td>
             <td>{{ $r->kd_produk }}</td>
-            <td>
-              @php
-              $bahan = $explode(',' ,$r->kd_bahan);
-              @endphp
-              @foreach ($bahan as $b)
-              {{ ($dataBahan[$b]->nm_bahan) }}
-              @endforeach
-            </td>
+            <td>{{ $r->kd_bahan }}</td>
             <td>{{ $r->ket }}</td>
             <td>
               <a href="" class="btn btn-sm btn-warning">Edit</a>

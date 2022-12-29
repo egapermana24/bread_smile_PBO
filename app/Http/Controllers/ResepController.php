@@ -59,14 +59,7 @@ class ResepController extends Controller
      */
     public function store(Request $request)
     {
-        if (!empty($request->kd_bahan)) {
-            $kd_bahan = implode(',', $request->kd_bahan);
-        } else {
-            $request->validate([
-                'kd_bahan' => 'required',
-            ]);
-        }
-
+        // validasi form
         $request->validate([
             'kd_resep' => 'required',
             'kd_produk' => 'required',
@@ -74,10 +67,22 @@ class ResepController extends Controller
             'ket' => 'required',
         ]);
 
-        // inputkan $kd_bahan ke tabel
-        $request->request->add(['kd_bahan' => $kd_bahan]);
+        // ambil data kd_bahan[] dan kd_produk[]
+        $kd_bahan = $request->kd_bahan;
+        $kd_produk = $request->kd_produk;
 
-        Resep::create($request->all());
+        // looping data kd_bahan[] dan kd_produk[]
+        for ($i = 0; $i < count($kd_bahan); $i++) {
+            // insert data ke tabel resep
+
+            dd($kd_bahan[$i]);
+            Resep::create([
+                'kd_resep' => $request->kd_resep,
+                'kd_produk' => $kd_produk[$i],
+                'kd_bahan' => $kd_bahan[$i],
+                'ket' => $request->ket,
+            ]);
+        }
 
         Alert::success('Data Resep', 'Berhasil ditambahakan!');
         return redirect('resep');
