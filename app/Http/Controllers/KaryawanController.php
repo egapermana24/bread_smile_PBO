@@ -322,26 +322,12 @@ class KaryawanController extends Controller
         }
     }
 
-<<<<<<< HEAD
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id, Karyawan $karyawan)
-    {
-        $karyawan->delete();
-        Alert::success('Data Karyawan', 'Berhasil dihapus!');
-        return redirect('karyawan');
-=======
-
-    public function destroy(Karyawan $karyawan)
     {
         // menghapus foto berdasarkan id
         File::delete('images/' . $karyawan->foto);
         $karyawan->delete();
-        return redirect()->route('karyawan.index')->with('status', 'Data Berhasil Dihapus');
->>>>>>> 1ee3415 (menambahkan fungsi edit dan hapus pada data karyawan)
+        Alert::success('Data Karyawan', 'Berhasil dihapus!');
+        return redirect('karyawan');
     }
 }
