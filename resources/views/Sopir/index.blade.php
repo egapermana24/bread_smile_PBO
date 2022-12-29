@@ -22,9 +22,9 @@
 
             <!-- menampilkan pesan berhasil -->
             @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
             @endif
 
             <a href="{{ route('sopir.create') }}" class="btn btn-primary mb-3">Tambah</a>
@@ -71,7 +71,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <p>Data bahan yang dihapus tidak akan bisa dikembalikan!</p>
+                                                <p>Data yang dihapus tidak akan bisa dikembalikan!</p>
                                             </div>
                                             <div class="modal-footer mx-auto">
                                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tidak</button>

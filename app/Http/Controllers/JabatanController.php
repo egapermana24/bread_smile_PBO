@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Jabatan;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class JabatanController extends Controller
 {
@@ -44,7 +45,8 @@ class JabatanController extends Controller
 
         Jabatan::create($request->all());
 
-        return redirect('jabatan')->with('status', 'Data Jabatan Berhasil Ditambahkan!');
+        Alert::success('Data Jabatan', 'Berhasil Ditambahkan!');
+        return redirect('jabatan');
     }
 
 
@@ -76,15 +78,15 @@ class JabatanController extends Controller
         ]);
 
         $jabatan->update($request->all());
-        return redirect()->route('jabatan.index')
-            ->with('status', 'Data Berhasil Diubah!');
+        Alert::success('Data Jabatan', 'Berhasil diubah!');
+        return redirect('jabatan');
     }
 
 
     public function destroy(Jabatan $jabatan)
     {
         $jabatan->delete();
-        return redirect()->route('jabatan.index')
-            ->with('status', 'Data Berhasil Dihapus.');
+        Alert::success('Data Jabatan', 'Berhasil dihapus!');
+        return redirect('jabatan');
     }
 }

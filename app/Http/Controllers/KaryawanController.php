@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Jabatan;
 use App\Models\Karyawan;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class KaryawanController extends Controller
 {
@@ -113,7 +114,8 @@ class KaryawanController extends Controller
             'foto' => $foto
         ]);
 
-        return redirect()->route('karyawan.index')->with('status', 'Data Berhasil Ditambahkan!');
+        Alert::success('Data Karyawan', 'Berhasil Ditambahkan!');
+        return redirect('karyawan');
     }
 
 
@@ -151,8 +153,10 @@ class KaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Karyawan $karyawan)
     {
-        //
+        $karyawan->delete();
+        Alert::success('Data Karyawan', 'Berhasil dihapus!');
+        return redirect('karyawan');
     }
 }

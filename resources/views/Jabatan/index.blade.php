@@ -9,22 +9,22 @@
 
             <!-- menampilkan pesan gagal -->
             @if ($errors->any())
-                <div class=" alert alert-danger alert-dismissible fade show col-10 my-2 mx-auto" role="alert">
-                    <strong>Upss!</strong> Terjadi masalah<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
-                </div>
+            <div class=" alert alert-danger alert-dismissible fade show col-10 my-2 mx-auto" role="alert">
+                <strong>Upss!</strong> Terjadi masalah<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+            </div>
             @endif
 
             <!-- menampilkan pesan berhasil -->
             @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
             @endif
 
             <!-- button modal -->
@@ -42,17 +42,39 @@
                 </thead>
                 <tbody>
                     @foreach ($jabatan as $jbtn)
-                        <tr>
-                            <td>{{ $jbtn->nm_jabatan }}</td>
-                            <td width="100px">
+                    <tr>
+                        <td>{{ $jbtn->nm_jabatan }}</td>
+                        <td width="100px">
                             <a href="{{ route('jabatan.edit',$jbtn->id_jabatan) }}" class="btn btn-sm btn-warning">Edit</a>
                             <form action="{{ route('jabatan.destroy', $jbtn->id_jabatan) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#hapus{{ $jbtn->id_jabatan }}">
+                                    Hapus
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="hapus{{ $jbtn->id_jabatan }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">Apakah yakin ingin menghapus {{ $jbtn->nm_jabatan }} ?</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Data yang dihapus tidak akan bisa dikembalikan!</p>
+                                            </div>
+                                            <div class="modal-footer mx-auto">
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tidak</button>
+                                                <button type="submit" class="btn btn-primary">Ya</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end button trigger modal -->
                             </form>
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
