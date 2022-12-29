@@ -322,7 +322,7 @@ class KaryawanController extends Controller
         }
     }
 
-    public function destroy($id, Karyawan $karyawan)
+    public function destroy(Karyawan $karyawan)
     {
         // menghapus foto berdasarkan id
         File::delete('images/' . $karyawan->foto);
