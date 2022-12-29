@@ -2,7 +2,7 @@
 
 @section('content')
 
-<!-- halaman create data karyawan -->
+<!-- halaman tambah data karyawan -->
 <div class="container">
   <div class="row">
     <div class="col-lg-5 col-md-6 col-sm-11">

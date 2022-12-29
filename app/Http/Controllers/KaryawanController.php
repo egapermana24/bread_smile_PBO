@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Jabatan;
 use App\Models\Karyawan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -32,10 +33,6 @@ class KaryawanController extends Controller
 
     public function create()
     {
-        // join tabel dengan tabel jabatan
-        // $karyawan = Karyawan::join('jabatan', 'karyawan.kd_jabatan', '=', 'jabatan.id_jabatan')
-        //     ->select('karyawan.*', 'jabatan.nm_jabatan')
-        //     ->get();
 
         // mengirim tittle dan judul ke view
         return view(
@@ -69,7 +66,7 @@ class KaryawanController extends Controller
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
         ]);
 
-        // cek apakah nama belakang terisi
+        // cek apakah nama belakang diisi
         if ($request->namaBelakang) {
             $nm_karyawan = [
                 $request->namaDepan,
@@ -80,22 +77,26 @@ class KaryawanController extends Controller
             $nm_karyawan = $request->namaDepan;
         }
 
+        // menggabungkan tempat dan tanggal lahir
         $ttl = [
             $request->tempat_lahir,
-            date('d F Y', strtotime($request->tgl_lahir))
+            $request->tgl_lahir
+            // date('d F Y', strtotime($request->tgl_lahir))
         ];
         $ttl = implode(', ', $ttl);
 
+        // menggabungkan kecamatan, kota, provinsi, dan nama jalan menjadi alamat lengkap
         $alamat = [
             $request->alamat_lengkap,
             'Kec. ' . $request->kecamatan,
             $request->select_kota . ' ' . $request->kota,
             'Prov. ' . $request->provinsi
         ];
-        $alamat = strtoupper(implode(', ', $alamat));
+        $alamat = strtoupper(implode(', ', $alamat)); // mengubah string menjadi huruf besar semua
 
         $no_telp = '+62' . $request->no_telp;
 
+        // upload foto
         if ($image = $request->file('foto')) {
             $destinationPath = 'images/';
             $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
@@ -124,29 +125,204 @@ class KaryawanController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+    public function edit(Karyawan $karyawan)
     {
-        //
+
+        // memisahkan nama depan dan nama belakang
+        $dataNama = explode(' ', $karyawan->nm_karyawan);
+        $namaDepan = $dataNama[0];
+        $namaBelakang = $dataNama[1];
+
+        // memisahkan tempat dan tanggal lahir
+        $dataTtl = explode(', ', $karyawan->ttl);
+        $tempatLahir = $dataTtl[0];
+        $tanggalLahir = $dataTtl[1];
+
+        // mwngubah huruf kecil semua
+        $karyawan->alamat = strtolower($karyawan->alamat);
+
+        // mwngubah awal setiap kalimat jadi huruf kapital
+        $karyawan->alamat = ucwords($karyawan->alamat);
+
+        // memisahkan bagian bagian dari alamat
+        $dataAlamat = explode(', ', $karyawan->alamat);
+        $namaJalan = $dataAlamat[0];
+
+        // memisahkan kecamatan
+        $dataKecamatan = explode('. ', $dataAlamat[1]);
+        $kecamatan = $dataKecamatan[1];
+
+        // memisahkan kota
+        $dataKota = explode(' ', $dataAlamat[2]);
+        $selectKota = $dataKota[0];
+        $kota = $dataKota[1];
+
+        // memisahkan provinsi
+        $dataProvinsi = explode('. ', $dataAlamat[3]);
+        $provinsi = $dataProvinsi[1];
+
+        // memisahkan nomor telepon
+        $dataNoTelp = explode('+62', $karyawan->no_telp);
+        $noTelp = $dataNoTelp[1];
+
+        // dd($namaDepan, $namaBelakang, $tempatLahir, $tanggalLahir, $namaJalan, $kecamatan, $selectKabupaten, $kabupaten, $provinsi);
+
+        // mengirim tittle dan judul ke view
+        return view(
+            'karyawan.edit',
+            [
+                'dataKaryawan' => [
+                    'namaDepan' => $namaDepan,
+                    'namaBelakang' => $namaBelakang,
+                    'tempat_lahir' => $tempatLahir,
+                    'tgl_lahir' => $tanggalLahir,
+                    'no_telp' => $noTelp,
+                    'alamat_lengkap' => $namaJalan,
+                    'kecamatan' => $kecamatan,
+                    'select_kota' => $selectKota,
+                    'kota' => $kota,
+                    'provinsi' => $provinsi
+                ],
+                'karyawan' => $karyawan,
+                'jabatan' => Jabatan::all(),
+                'tittle' => 'Edit Data',
+                'judul' => 'Edit Data Karyawan',
+                'menu' => 'Data Karyawan',
+                'submenu' => 'Edit Data'
+            ]
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+
+    public function update(Request $request, Karyawan $karyawan)
     {
-        //
+        // cek apakah user mengganti foto atau tidak
+        if ($request->has('foto')) {
+
+            // hapus foto lama
+            $karyawan = Karyawan::find($karyawan->id_karyawan);
+            File::delete('images/' . $karyawan->foto);
+            $rules = [
+                'namaDepan' => 'required',
+                'kd_jabatan' => 'required',
+                'jenis_kelamin' => 'required',
+                'tempat_lahir' => 'required',
+                'tgl_lahir' => 'required',
+                'no_telp' => 'required|min:11|min:12|numeric',
+                'provinsi' => 'required',
+                'select_kota' => 'required',
+                'kota' => 'required',
+                'kecamatan' => 'required',
+                'alamat_lengkap' => 'required',
+                'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
+            ];
+
+            if ($request->nip != $karyawan->nip) {
+                $rules['nip'] = 'required|min:11|max:11|unique:karyawan,nip';
+            };
+
+            $input = $request->validate($rules);
+
+            // cek apakah nama belakang diisi
+            if ($request->namaBelakang) {
+                $nm_karyawan = [
+                    $input['namaDepan'],
+                    $request->namaBelakang
+                ];
+                $input['nm_karyawan'] = implode(' ', $nm_karyawan);
+            } else {
+                $input['nm_karyawan'] = $input['namaDepan'];
+            }
+
+            // menggabungkan tempat dan tanggal lahir
+            $ttl = [
+                $input['tempat_lahir'],
+                $input['tgl_lahir']
+                // date('d F Y', strtotime($input['tgl_lahir))
+            ];
+            $input['ttl'] = implode(', ', $ttl);
+
+            // menggabungkan kecamatan, kota, provinsi, dan nama jalan menjadi alamat lengkap
+            $alamat = [
+                $input['alamat_lengkap'],
+                'Kec. ' . $input['kecamatan'],
+                $input['select_kota'] . ' ' . $input['kota'],
+                'Prov. ' . $input['provinsi']
+            ];
+            $input['alamat'] = strtoupper(implode(', ', $alamat)); // mengubah string menjadi huruf besar semua
+
+            $input['no_telp'] = '+62' . $input['no_telp'];
+
+            if ($image = $request->file('foto')) {
+                $destinationPath = 'images/';
+                $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $image->move($destinationPath, $profileImage);
+                $input['foto'] = "$profileImage";
+            }
+
+            $karyawan->update($input);
+
+            return redirect()->route('karyawan.index')->with('status', 'Data Berhasil Diubah');
+        } else {
+            $rules = [
+                'namaDepan' => 'required',
+                'kd_jabatan' => 'required',
+                'jenis_kelamin' => 'required',
+                'tempat_lahir' => 'required',
+                'tgl_lahir' => 'required',
+                'no_telp' => 'required|min:11|min:12|numeric',
+                'provinsi' => 'required',
+                'select_kota' => 'required',
+                'kota' => 'required',
+                'kecamatan' => 'required',
+                'alamat_lengkap' => 'required'
+            ];
+
+            $karyawan = Karyawan::find($karyawan->id_karyawan);
+
+            if ($request->nip != $karyawan->nip) {
+                $rules['nip'] = 'required|min:11|max:11|unique:karyawan,nip';
+            };
+
+            $input = $request->validate($rules);
+
+            // cek apakah nama belakang diisi
+            if ($request->namaBelakang) {
+                $nm_karyawan = [
+                    $input['namaDepan'],
+                    $request->namaBelakang
+                ];
+                $input['nm_karyawan'] = implode(' ', $nm_karyawan);
+            } else {
+                $input['nm_karyawan'] = $input['namaDepan'];
+            }
+
+            // menggabungkan tempat dan tanggal lahir
+            $ttl = [
+                $input['tempat_lahir'],
+                $input['tgl_lahir']
+                // date('d F Y', strtotime($input['tgl_lahir))
+            ];
+            $input['ttl'] = implode(', ', $ttl);
+
+            // menggabungkan kecamatan, kota, provinsi, dan nama jalan menjadi alamat lengkap
+            $alamat = [
+                $input['alamat_lengkap'],
+                'Kec. ' . $input['kecamatan'],
+                $input['select_kota'] . ' ' . $input['kota'],
+                'Prov. ' . $input['provinsi']
+            ];
+            $input['alamat'] = strtoupper(implode(', ', $alamat)); // mengubah string menjadi huruf besar semua
+
+            $input['no_telp'] = '+62' . $input['no_telp'];
+
+            $karyawan->update($input);
+            return redirect()->route('karyawan.index')->with('status', 'Data Berhasil Diubah');
+        }
     }
 
+<<<<<<< HEAD
     /**
      * Remove the specified resource from storage.
      *
@@ -158,5 +334,14 @@ class KaryawanController extends Controller
         $karyawan->delete();
         Alert::success('Data Karyawan', 'Berhasil dihapus!');
         return redirect('karyawan');
+=======
+
+    public function destroy(Karyawan $karyawan)
+    {
+        // menghapus foto berdasarkan id
+        File::delete('images/' . $karyawan->foto);
+        $karyawan->delete();
+        return redirect()->route('karyawan.index')->with('status', 'Data Berhasil Dihapus');
+>>>>>>> 1ee3415 (menambahkan fungsi edit dan hapus pada data karyawan)
     }
 }
