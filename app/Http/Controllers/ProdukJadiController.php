@@ -6,6 +6,7 @@ use App\Models\ProdukJadi;
 use Illuminate\Http\Request;
 use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProdukJadiController extends Controller
 {
@@ -53,7 +54,8 @@ class ProdukJadiController extends Controller
 
         ProdukJadi::create($request->all());
 
-        return redirect('produkJadi')->with('status', 'Data Produk Berhasil Ditambahkan!');
+        Alert::success('Data Produk', 'Berhasil Ditambahkan!');
+        return redirect('produkJadi');
     }
 
     public function show(ProdukJadi $produkJadi)
@@ -94,13 +96,14 @@ class ProdukJadiController extends Controller
         ]);
 
         $produkJadi->update($request->all());
-        return redirect()->route('produkJadi.index')
-            ->with('status', 'Data Berhasil Diubah!');
+        Alert::success('Data Produk', 'Berhasil diubah!');
+        return redirect('produkJadi');
     }
 
     public function destroy(ProdukJadi $produkJadi)
     {
         ProdukJadi::destroy($produkJadi->kd_produk);
-        return redirect('produkJadi')->with('status', 'Data Produk Berhasil Dihapus!');
+        Alert::success('Data Produk', 'Berhasil dihapus!');
+        return redirect('produkJadi');
     }
 }

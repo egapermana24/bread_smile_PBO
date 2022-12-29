@@ -41,11 +41,11 @@
                 @csrf
                 @method('DELETE')
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#hapus">
+                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#hapus{{ $bahan->kd_bahan }}">
                   Hapus
                 </button>
                 <!-- Modal -->
-                <div class="modal fade" id="hapus" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="hapus{{ $bahan->kd_bahan }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -62,6 +62,7 @@
                     </div>
                   </div>
                 </div>
+                <!-- end button trigger modal -->
               </form>
               <!-- END FUNGSI HAPUS -->
             </td>

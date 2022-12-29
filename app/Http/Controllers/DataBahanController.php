@@ -6,10 +6,7 @@ use App\Models\DataBahan;
 use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Alert;
-// sweetalert
-use App\Config\sweetalert;
-
+use RealRashid\SweetAlert\Facades\Alert;
 
 class DataBahanController extends Controller
 {

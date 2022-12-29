@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\bahanKeluar;
 use App\Models\DataBahan;
 use Illuminate\Http\Request;
-
+use RealRashid\SweetAlert\Facades\Alert;
 
 class BahanKeluarController extends Controller
 {
@@ -82,7 +82,8 @@ class BahanKeluarController extends Controller
         ]);
 
         // alihkan halaman ke halaman bahan keluar
-        return redirect('/bahanKeluar')->with('status', 'Data berhasil ditambahkan!');
+        Alert::success('Data Pemakaian Bahan', 'Berhasil Ditambahkan!');
+        return redirect('bahanKeluar');
     }
 
 
@@ -146,8 +147,8 @@ class BahanKeluarController extends Controller
 
             $bahanKeluar->update($input);
 
-            return redirect()->route('bahanKeluar.index')
-                ->with('status', 'Data Berhasil Diubah!');
+            Alert::success('Data Pemakaian Bahan', 'Berhasil diubah!');
+            return redirect('bahanKeluar');
         } else {
             $request->validate([
                 'kd_bahan' => 'required',
@@ -176,14 +177,14 @@ class BahanKeluarController extends Controller
 
                 $bahanKeluar->update($input);
 
-                return redirect()->route('bahanKeluar.index')
-                    ->with('status', 'Data Berhasil Diubah!');
+                Alert::success('Data Pemakaian Bahan', 'Berhasil diubah!');
+                return redirect('bahanKeluar');
             } else {
                 $input = $request->all();
                 $bahanKeluar->update($input);
 
-                return redirect()->route('bahanKeluar.index')
-                    ->with('status', 'Data Berhasil Diubah!');
+                Alert::success('Data Pemakaian Bahan', 'Berhasil diubah!');
+                return redirect('bahanKeluar');
             }
         }
     }
@@ -197,6 +198,7 @@ class BahanKeluarController extends Controller
         $stok->save();
 
         $bahanKeluar->delete();
-        return redirect()->route('bahanKeluar.index')->with('status', 'Data Berhasil Dihapus');
+        Alert::success('Data Pemakaian Bahan', 'Berhasil dihapus!');
+        return redirect('bahanKeluar');
     }
 }

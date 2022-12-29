@@ -6,6 +6,7 @@ use App\Models\BahanMasuk;
 use App\Models\DataBahan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class BahanMasukController extends Controller
 {
@@ -84,8 +85,8 @@ class BahanMasukController extends Controller
         ]);
 
 
-        return redirect()->route('bahanMasuk.index')
-            ->with('success', 'Bahan Masuk Berhasil Ditambahkan');
+        Alert::success('Data Pembelian', 'Berhasil Ditambahkan!');
+        return redirect('bahanMasuk');
     }
 
 
@@ -151,8 +152,8 @@ class BahanMasukController extends Controller
 
             $bahanMasuk->update($input);
 
-            return redirect()->route('bahanMasuk.index')
-                ->with('status', 'Data Berhasil Diubah!');
+            Alert::success('Data Pembelian', 'Berhasil diubah!');
+            return redirect('bahanMasuk');
         } else {
             $request->validate([
                 'kd_bahan' => 'required',
@@ -180,14 +181,14 @@ class BahanMasukController extends Controller
 
                 $bahanMasuk->update($input);
 
-                return redirect()->route('bahanMasuk.index')
-                    ->with('status', 'Data Berhasil Diubah!');
+                Alert::success('Data Pembelian', 'Berhasil diubah!');
+                return redirect('bahanMasuk');
             } else {
                 $input = $request->all();
                 $bahanMasuk->update($input);
 
-                return redirect()->route('bahanMasuk.index')
-                    ->with('status', 'Data Berhasil Diubah!');
+                Alert::success('Data Pembelian', 'Berhasil diubah!');
+                return redirect('bahanMasuk');
             }
         }
     }
@@ -201,6 +202,7 @@ class BahanMasukController extends Controller
         $stok->save();
 
         $bahanMasuk->delete();
-        return redirect()->route('bahanMasuk.index')->with('status', 'Data Berhasil Dihapus');
+        Alert::success('Data Pembelian', 'Berhasil dihapus!');
+        return redirect('bahanMasuk');
     }
 }

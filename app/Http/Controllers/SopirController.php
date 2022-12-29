@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sopir;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SopirController extends Controller
 {
@@ -66,7 +67,8 @@ class SopirController extends Controller
 
         Sopir::create($input);
 
-        return redirect('sopir')->with('status', 'Data Berhasil Ditambahkan!');
+        Alert::success('Data Sopir', 'Berhasil Ditambahkan!');
+        return redirect('sopir');
     }
 
     public function show(Sopir $sopir)
@@ -118,7 +120,8 @@ class SopirController extends Controller
             $sopir = Sopir::find($id);
             $sopir->update($input);
 
-            return redirect()->route('sopir.index')->with('status', 'Data Berhasil Diubah');
+            Alert::success('Data Sopir', 'Berhasil diubah!');
+            return redirect('sopir');
         } else {
             $request->validate([
                 'kd_sopir' => 'required',
@@ -132,7 +135,8 @@ class SopirController extends Controller
 
             $sopir = Sopir::find($id);
             $sopir->update($input);
-            return redirect()->route('sopir.index')->with('status', 'Data Berhasil Diubah');
+            Alert::success('Data Sopir', 'Berhasil diubah!');
+            return redirect('sopir');
         }
     }
 
@@ -141,6 +145,7 @@ class SopirController extends Controller
         // menghapus foto berdasarkan id
         File::delete('images/' . $sopir->foto);
         $sopir->delete();
-        return redirect()->route('sopir.index')->with('status', 'Data Berhasil Dihapus');
+        Alert::success('Data Sopir', 'Berhasil dihapus!');
+        return redirect('sopir');
     }
 }

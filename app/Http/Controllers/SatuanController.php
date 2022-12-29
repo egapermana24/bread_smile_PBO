@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Satuan;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SatuanController extends Controller
 {
@@ -49,7 +50,8 @@ class SatuanController extends Controller
 
         Satuan::create($request->all());
 
-        return redirect('satuan')->with('status', 'Data Satuan Berhasil Ditambahkan!');
+        Alert::success('Data Satuan', 'Berhasil Ditambahkan!');
+        return redirect('satuan');
     }
 
     public function show(Satuan $satuan)
@@ -78,14 +80,14 @@ class SatuanController extends Controller
         ]);
 
         $satuan->update($request->all());
-        return redirect()->route('satuan.index')
-            ->with('status', 'Data Berhasil Diubah!');
+        Alert::success('Data Satuan', 'Berhasil diubah!');
+        return redirect('satuan');
     }
 
     public function destroy(Satuan $satuan)
     {
         $satuan->delete();
-        return redirect()->route('satuan.index')
-            ->with('status', 'Data Berhasil Dihapus.');
+        Alert::success('Data Satuan', 'Berhasil dihapus!');
+        return redirect('satuan');
     }
 }

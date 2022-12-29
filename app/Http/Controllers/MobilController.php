@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mobil;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class MobilController extends Controller
 {
@@ -47,7 +48,8 @@ class MobilController extends Controller
 
         Mobil::create($request->all());
 
-        return redirect('mobil')->with('status', 'Data Produk Berhasil Ditambahkan!');
+        Alert::success('Data Mobil', 'Berhasil ditambahakan!');
+        return redirect('mobil');
     }
 
     public function show(Mobil $mobil)
@@ -84,13 +86,14 @@ class MobilController extends Controller
 
         $validateData = $request->validate($rules);
         $mobil->update($validateData);
-        return redirect()->route('mobil.index')
-            ->with('status', 'Data Berhasil Diubah!');
+        Alert::success('Data Mobil', 'Berhasil diubah!');
+        return redirect('mobil');
     }
 
     public function destroy(Mobil $mobil)
     {
         Mobil::destroy($mobil->kd_mobil);
-        return redirect('mobil')->with('status', 'Data Produk Berhasil Dihapus!');
+        Alert::success('Data Mobil', 'Berhasil dihapus!');
+        return redirect('mobil');
     }
 }

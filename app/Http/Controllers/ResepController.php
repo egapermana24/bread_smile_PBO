@@ -6,6 +6,7 @@ use App\Models\Resep;
 use App\Models\DataBahan;
 use App\Models\ProdukJadi;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ResepController extends Controller
 {
@@ -78,7 +79,8 @@ class ResepController extends Controller
 
         Resep::create($request->all());
 
-        return redirect('/resep')->with('status', 'Data berhasil ditambahkan!');
+        Alert::success('Data Resep', 'Berhasil ditambahakan!');
+        return redirect('resep');
     }
 
     /**
