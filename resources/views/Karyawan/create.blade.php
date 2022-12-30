@@ -65,8 +65,8 @@
             <label for="jenis_kelamin">Jenis Kelamin</label>
             <select class="form-control" name="jenis_kelamin" id="jenis_kelamin" required>
               <option disabled hidden selected>-- Silahkan Pilih --</option>
-              <option value="Laki-laki, {{ old('Laki-laki') }}">Laki-laki</option>
-              <option value="Perempuan, {{ old('Perempuan') }}">Perempuan</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
             </select>
             @error('jenis_kelamin')
             <div class="text-danger mt-2 mx-1">
