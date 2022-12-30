@@ -77,6 +77,22 @@ class DataBahanController extends Controller
 
     public function update(Request $request, DataBahan $dataBahan)
     {
+
+        // mengubah nama validasi
+        $messages = [
+            'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'nm_bahan.min' => 'Nama Bahan minimal 3 karakter',
+            'nm_bahan.max' => 'Nama Bahan maksimal 50 karakter',
+            'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
+            'harga_beli.required' => 'Harga Beli tidak boleh kosong',
+            'harga_beli.integer' => 'Harga Beli harus berupa angka',
+            'stok.required' => 'Stok tidak boleh kosong',
+            'stok.integer' => 'Stok harus berupa angka',
+            'ket.min' => 'Keterangan tidak boleh kosong',
+            'ket.min' => 'Keterangan minimal 3 karakter',
+        ];
+
+
         $request->validate([
             'kd_bahan' => 'required',
             'nm_bahan' => 'required|min:3|max:50',
@@ -84,7 +100,7 @@ class DataBahanController extends Controller
             'harga_beli' => 'required|integer',
             'stok' => 'required|integer',
             'ket' => 'required|min:3',
-        ]);
+        ], $messages);
 
         $dataBahan->update($request->all());
 
