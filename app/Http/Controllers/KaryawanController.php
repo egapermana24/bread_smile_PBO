@@ -326,7 +326,6 @@ class KaryawanController extends Controller
 
     public function destroy(Karyawan $karyawan)
     {
-        // menghapus foto berdasarkan id
         File::delete('images/' . $karyawan->foto);
         $karyawan->delete();
         Alert::success('Data Karyawan', 'Berhasil dihapus!');
