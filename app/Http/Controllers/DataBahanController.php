@@ -43,13 +43,27 @@ class DataBahanController extends Controller
 
     public function store(Request $request)
     {
+        // mengubah nama validasi
+        $messages = [
+            'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'nm_bahan.min' => 'Nama Bahan minimal 3 karakter',
+            'nm_bahan.max' => 'Nama Bahan maksimal 50 karakter',
+            'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
+            'harga_beli.required' => 'Harga Beli tidak boleh kosong',
+            'harga_beli.integer' => 'Harga Beli harus berupa angka',
+            'stok.required' => 'Stok tidak boleh kosong',
+            'stok.integer' => 'Stok harus berupa angka',
+            'ket.min' => 'Keterangan tidak boleh kosong',
+            'ket.min' => 'Keterangan minimal 3 karakter',
+        ];
+
         $request->validate([
             'kd_bahan' => 'required|min:3|max:10',
             'nm_bahan' => 'required|min:3|max:50',
             'harga_beli' => 'required',
             'stok' => 'required|numeric',
             'ket' => 'required|min:3',
-        ]);
+        ],  $messages);
 
         DataBahan::create($request->all());
 
