@@ -70,6 +70,7 @@ class BahanKeluarController extends Controller
             'tgl_keluar.required' => 'Tanggal Keluar tidak boleh kosong',
             'jumlah.required' => 'Jumlah tidak boleh kosong',
             'ket.required' => 'Keterangan tidak boleh kosong',
+            'ket.min' => 'Keterangan minimal 3 karakter',
         ];
 
         $request->validate([
@@ -145,10 +146,10 @@ class BahanKeluarController extends Controller
             // mengubah nama validasi
             $messages = [
                 'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
-                'nm_bahan.required' => 'Nama Bahan tidak boleh kosong',
-                'tgl_keluar.required' => 'Tanggal Keluar tidak boleh kosong',
                 'jumlah.required' => 'Jumlah tidak boleh kosong',
+                'tgl_keluar.required' => 'Tanggal Keluar tidak boleh kosong',
                 'ket.required' => 'Keterangan tidak boleh kosong',
+                'ket.min' => 'Keterangan minimal 3 karakter',
             ];
 
             $request->validate([
@@ -172,10 +173,10 @@ class BahanKeluarController extends Controller
             // mengubah nama validasi
             $messages = [
                 'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
-                'nm_bahan.required' => 'Nama Bahan tidak boleh kosong',
-                'tgl_keluar.required' => 'Tanggal Keluar tidak boleh kosong',
                 'jumlah.required' => 'Jumlah tidak boleh kosong',
+                'tgl_keluar.required' => 'Tanggal Keluar tidak boleh kosong',
                 'ket.required' => 'Keterangan tidak boleh kosong',
+                'ket.min' => 'Keterangan minimal 3 karakter',
             ];
 
             $request->validate([
