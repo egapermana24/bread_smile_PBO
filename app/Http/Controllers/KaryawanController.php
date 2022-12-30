@@ -263,7 +263,8 @@ class KaryawanController extends Controller
 
             $karyawan->update($input);
 
-            return redirect()->route('karyawan.index')->with('status', 'Data Berhasil Diubah');
+            Alert::success('Data Karyawan', 'Berhasil diubah!');
+            return redirect()->route('karyawan.index');
         } else {
             $rules = [
                 'namaDepan' => 'required',
@@ -318,7 +319,8 @@ class KaryawanController extends Controller
             $input['no_telp'] = '+62' . $input['no_telp'];
 
             $karyawan->update($input);
-            return redirect()->route('karyawan.index')->with('status', 'Data Berhasil Diubah');
+            Alert::success('Data Karyawan', 'Berhasil diubah!');
+            return redirect()->route('karyawan.index');
         }
     }
 
