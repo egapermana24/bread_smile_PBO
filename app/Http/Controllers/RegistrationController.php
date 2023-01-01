@@ -60,13 +60,7 @@ class RegistrationController extends Controller
     public function login()
     {
         return view(
-            'auth.login',
-            [
-                'tittle' => '',
-                'judul' => '',
-                'menu' => '',
-                'submenu' => ''
-            ]
+            'auth.login'
         );
     }
 
@@ -79,7 +73,7 @@ class RegistrationController extends Controller
         ];
 
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email:dns',
             'password' => 'required',
         ], $messages);
 
@@ -93,10 +87,11 @@ class RegistrationController extends Controller
             return redirect(RouteServiceProvider::HOME)->with('success', 'Login Berhasil');
         }
 
-        return back()->withErrors([
-            'email' => 'Email yang kamu masukan salah',
-            'password' => 'Password yang kamu masukan salah',
-        ]);
+        // return back()->withErrors([
+        //     'email' => 'Email yang kamu masukan salah',
+        //     'password' => 'Password yang kamu masukan salah',
+        // ]);
+        return back()->with('loginError', 'Login failed!');
     }
 
     public function logout(Request $request)

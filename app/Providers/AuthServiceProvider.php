@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use App\Models\DataBahan;
+use App\Models\User;
+use App\Policies\DataBahanPolicy;
+use Illuminate\Support\Facades\Gate;
+
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -13,7 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\DataBahan' => 'App\Policies\DataBahanPolicy',
+        DataBahan::class => DataBahanPolicy::class
     ];
 
     /**
@@ -25,6 +30,20 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('backoffice', function (User $user) {
+            return $user->role == 'backoffice';
+        });
+
+        Gate::define('gudang', function (User $user) {
+            return $user->role == 'gudang' || $user->role == 'backoffice';
+        });
+
+        Gate::define('produksi', function (User $user) {
+            return $user->role == 'produksi' || $user->role == 'backoffice';
+        });
+
+        Gate::define('distribusi', function (User $user) {
+            return $user->role == 'distribusi' || $user->role == 'backoffice';
+        });
     }
 }

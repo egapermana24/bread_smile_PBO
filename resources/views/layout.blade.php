@@ -94,7 +94,7 @@
             <img src="{{ asset('Assets/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block">Administrator</a>
+            <a href="#" class="d-block">{{ auth()->user()->name }}</a>
           </div>
         </div>
 
@@ -113,6 +113,8 @@
                 </p>
               </a>
             </li>
+
+            @can('backoffice')
             <li class="nav-item">
               <a href="/jabatan" class="nav-link {{ Request::is('jabatan*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-copy"></i>
@@ -137,6 +139,11 @@
                 </p>
               </a>
             </li>
+            @endcan
+
+            {{-- @can('gudang', App\Models\DataBahan::class) --}}
+
+            @can('gudang')
             <li class="nav-item">
               <!-- bahan baku -->
               <a href="#" class="nav-link {{ Request::is('dataBahan*', 'bahanMasuk*', 'bahanKeluar*') ? 'active' : '' }}">
@@ -168,6 +175,9 @@
                 </li>
               </ul>
             </li>
+            @endcan
+            
+            @can('produksi')
             <li class="nav-item">
               <!-- Produk -->
               <a href="#" class="nav-link {{ Request::is('resep*', 'produkJadi*', 'produkMasuk*', 'produkKeluar*') ? 'active' : '' }}">
@@ -205,6 +215,9 @@
                 </li>
               </ul>
             </li>
+            @endcan
+            
+            @can('distribusi')
             <li class="nav-item">
               <!-- Laporan -->
               <a href="#" class="nav-link {{ Request::is('mobil*', 'sopir*') ? 'active' : '' }}">
@@ -230,6 +243,9 @@
                 </li>
               </ul>
             </li>
+            @endcan
+
+            @can('backoffice')
             <li class="nav-item">
               <!-- Laporan -->
               <a href="#" class="nav-link {{ Request::is('lapPermintaanBahan*', 'lapPermintaanProduk*', 'lapPengirimanProduk*') ? 'active' : '' }}">
@@ -261,6 +277,8 @@
                 </li>
               </ul>
             </li>
+            @endcan
+            
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
