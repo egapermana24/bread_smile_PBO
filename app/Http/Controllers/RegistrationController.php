@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RegistrationController extends Controller
 {
@@ -54,6 +55,8 @@ class RegistrationController extends Controller
 
         User::create($input);
 
+
+        Alert::success('Registrasi Berhasil', 'Silahkan Login!');
         return redirect('login')->with('status', 'Registrasi Berhasil, Silahkan Login!');
     }
 
