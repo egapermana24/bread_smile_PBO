@@ -12,6 +12,8 @@ class ProdukJadiController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', ProdukJadi::class);
+
         // join tabel dengan tabel satuan
         $produkJadi = ProdukJadi::join('satuan', 'produkjadi.kd_satuan', '=', 'satuan.id_satuan')
             ->select('produkjadi.*', 'satuan.nm_satuan')
@@ -27,6 +29,8 @@ class ProdukJadiController extends Controller
 
     public function create()
     {
+        $this->authorize('create', ProdukJadi::class);
+
         $kode = ProdukJadi::max('kd_produk');
         $kode = (int) substr($kode, 4, 4);
         $kode = $kode + 1;
@@ -43,6 +47,8 @@ class ProdukJadiController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', ProdukJadi::class);
+
         // mengubah nama validasi
         $messages = [
             'kd_produk.required' => 'Kode Produk tidak boleh kosong',
@@ -76,6 +82,8 @@ class ProdukJadiController extends Controller
 
     public function edit(ProdukJadi $produkJadi)
     {
+        $this->authorize('update', $produkJadi);
+
         $produkJadi = DB::table('produkjadi')->join('satuan', 'produkjadi.kd_satuan', '=', 'satuan.id_satuan')->select('produkjadi.*', 'satuan.nm_satuan')->where('kd_satuan', $produkJadi->kd_satuan)->first();
 
         $satuan = Satuan::all();
@@ -93,6 +101,8 @@ class ProdukJadiController extends Controller
 
     public function update(Request $request, ProdukJadi $produkJadi)
     {
+        $this->authorize('update', $produkJadi);
+
         // mengubah nama validasi
         $messages = [
             'kd_produk.required' => 'Kode Produk tidak boleh kosong',
@@ -129,6 +139,8 @@ class ProdukJadiController extends Controller
 
     public function destroy(ProdukJadi $produkJadi)
     {
+        $this->authorize('delete', $produkJadi);
+
         ProdukJadi::destroy($produkJadi->kd_produk);
         Alert::success('Data Produk', 'Berhasil dihapus!');
         return redirect('produkJadi');

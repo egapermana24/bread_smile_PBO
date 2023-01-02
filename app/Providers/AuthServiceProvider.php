@@ -18,7 +18,10 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\DataBahan' => 'App\Policies\DataBahanPolicy',
         'App\Models\Satuan' => 'App\Policies\SatuanMassaPolicy',
         'App\Models\BahanMasuk' => 'App\Policies\BahanMasukPolicy',
-        'App\Models\BahanKeluar' => 'App\Policies\BahanKeluarPolicy'
+        'App\Models\BahanKeluar' => 'App\Policies\BahanKeluarPolicy',
+        'App\Models\Mobil' => 'App\Policies\MobilPolicy',
+        'App\Models\Sopir' => 'App\Policies\SopirPolicy',
+        'App\Models\ProdukJadi' => 'App\Policies\ProdukJadiPolicy',
     ];
 
     /**
@@ -35,15 +38,15 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('gudang', function (User $user) {
-            return $user->role == 'gudang' || $user->role == 'backoffice';
+            return $user->role == 'gudang';
         });
 
         Gate::define('produksi', function (User $user) {
-            return $user->role == 'produksi' || $user->role == 'backoffice';
+            return $user->role == 'produksi';
         });
 
         Gate::define('distribusi', function (User $user) {
-            return $user->role == 'distribusi' || $user->role == 'backoffice';
+            return $user->role == 'distribusi';
         });
     }
 }

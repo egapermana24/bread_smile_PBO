@@ -11,6 +11,8 @@ class SopirController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Sopir::class);
+
         $sopir = Sopir::all();
 
         // mengirim tittle dan judul ke view
@@ -28,6 +30,8 @@ class SopirController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Sopir::class);
+
         $kode = Sopir::max('kd_sopir');
         $kode = (int) substr($kode, 4, 4);
         $kode = $kode + 1;
@@ -47,6 +51,8 @@ class SopirController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', Sopir::class);
+
         // mengubah nama validasi
         $messages = [
             'kd_sopir.required' => 'Kode Sopir tidak boleh kosong',
@@ -97,6 +103,8 @@ class SopirController extends Controller
 
     public function edit(Sopir $sopir)
     {
+        $this->authorize('update', $sopir);
+
         return view(
             'sopir.edit',
             compact('sopir'),
@@ -111,6 +119,8 @@ class SopirController extends Controller
 
     public function update(Request $request, $id)
     {
+        $sopir = Sopir::find($id);
+        $this->authorize('update', $sopir);
 
         // cek apakah user mengganti foto atau tidak
         if ($request->has('foto')) {
@@ -183,6 +193,8 @@ class SopirController extends Controller
 
     public function destroy(Sopir $sopir)
     {
+        $this->authorize('delete', $sopir);
+
         // menghapus foto berdasarkan id
         File::delete('images/' . $sopir->foto);
         $sopir->delete();
