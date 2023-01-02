@@ -50,6 +50,31 @@ class KaryawanController extends Controller
 
     public function store(Request $request)
     {
+        // mengubah nama validasi
+        $messages = [
+            'nip.required' => 'NIP tidak boleh kosong',
+            'nip.min' => 'NIP minimal 11 karakter',
+            'nip.max' => 'NIP maksimal 11 karakter',
+            'nip.unique' => 'NIP sudah terdaftar',
+            'namaDepan.required' => 'Nama Depan tidak boleh kosong',
+            'kd_jabatan.required' => 'Kode jabatan tidak boleh kosong',
+            'jenis_kelamin.required' => 'Jenis Kelamin tidak boleh kosong',
+            'tempat_lahir.required' => 'Tempat Lahir tidak boleh kosong',
+            'tgl_lahir.required' => 'Tanggal Lahir tidak boleh kosong',
+            'no_telp.required' => 'Nomor Telepon tidak boleh kosong',
+            'no_telp.min' => 'Nomor Telepon minimal 11 karakter',
+            'no_telp.max' => 'Nomor Telepon maksimal 12 karakter',
+            'no_telp.integer' => 'Nomor Telepon harus berupa angka',
+            'provinsi.required' => 'Provinsi tidak boleh kosong',
+            'select_kota.required' => 'Kota / Kabupaten',
+            'kota.required' => 'Kota tidak boleh kosong',
+            'kecamatan.required' => 'Kecamatan tidak boleh kosong',
+            'alamat_lengkap.required' => 'Alamat tidak boleh kosong',
+            'foto.required' => 'Foto tidak boleh kosong',
+            'foto.images' => 'File yang anda pilih bukan foto atau gambar',
+            'foto.mimes' => 'File atau Foto harus berupa jpeg,png,jpg,gif,svg,webp',
+        ];
+
         $this->validate($request, [
             'nip' => 'required|min:11|max:11|unique:karyawan,nip',
             'namaDepan' => 'required',
@@ -64,7 +89,7 @@ class KaryawanController extends Controller
             'kecamatan' => 'required',
             'alamat_lengkap' => 'required',
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
-        ]);
+        ], $messages);
 
         // cek apakah nama belakang diisi
         if ($request->namaBelakang) {
@@ -203,6 +228,32 @@ class KaryawanController extends Controller
             // hapus foto lama
             $karyawan = Karyawan::find($karyawan->id_karyawan);
             File::delete('images/' . $karyawan->foto);
+
+            // mengubah nama validasi
+            $messages = [
+                'namaDepan.required' => 'Nama Depan tidak boleh kosong',
+                'kd_jabatan.required' => 'Kode jabatan tidak boleh kosong',
+                'jenis_kelamin.required' => 'Jenis Kelamin tidak boleh kosong',
+                'tempat_lahir.required' => 'Tempat Lahir tidak boleh kosong',
+                'tgl_lahir.required' => 'Tanggal Lahir tidak boleh kosong',
+                'no_telp.required' => 'Nomor Telepon tidak boleh kosong',
+                'no_telp.min' => 'Nomor Telepon minimal 11 karakter',
+                'no_telp.max' => 'Nomor Telepon maksimal 12 karakter',
+                'no_telp.integer' => 'Nomor Telepon harus berupa angka',
+                'provinsi.required' => 'Provinsi tidak boleh kosong',
+                'select_kota.required' => 'Kota / Kabupaten',
+                'kota.required' => 'Kota tidak boleh kosong',
+                'kecamatan.required' => 'Kecamatan tidak boleh kosong',
+                'alamat_lengkap.required' => 'Alamat tidak boleh kosong',
+                'foto.required' => 'Foto tidak boleh kosong',
+                'foto.images' => 'File yang anda pilih bukan foto atau gambar',
+                'foto.mimes' => 'File atau Foto harus berupa jpeg,png,jpg,gif,svg,webp',
+                'nip.required' => 'NIP tidak boleh kosong',
+                'nip.min' => 'NIP minimal 11 karakter',
+                'nip.max' => 'NIP maksimal 11 karakter',
+                'nip.unique' => 'NIP sudah terdaftar',
+            ];
+
             $rules = [
                 'namaDepan' => 'required',
                 'kd_jabatan' => 'required',
@@ -222,7 +273,7 @@ class KaryawanController extends Controller
                 $rules['nip'] = 'required|min:11|max:11|unique:karyawan,nip';
             };
 
-            $input = $request->validate($rules);
+            $input = $request->validate($rules, $messages);
 
             // cek apakah nama belakang diisi
             if ($request->namaBelakang) {
@@ -266,6 +317,28 @@ class KaryawanController extends Controller
             Alert::success('Data Karyawan', 'Berhasil diubah!');
             return redirect()->route('karyawan.index');
         } else {
+            // mengubah nama validasi
+            $messages = [
+                'namaDepan.required' => 'Nama Depan tidak boleh kosong',
+                'kd_jabatan.required' => 'Kode jabatan tidak boleh kosong',
+                'jenis_kelamin.required' => 'Jenis Kelamin tidak boleh kosong',
+                'tempat_lahir.required' => 'Tempat Lahir tidak boleh kosong',
+                'tgl_lahir.required' => 'Tanggal Lahir tidak boleh kosong',
+                'no_telp.required' => 'Nomor Telepon tidak boleh kosong',
+                'no_telp.min' => 'Nomor Telepon minimal 11 karakter',
+                'no_telp.max' => 'Nomor Telepon maksimal 12 karakter',
+                'no_telp.integer' => 'Nomor Telepon harus berupa angka',
+                'provinsi.required' => 'Provinsi tidak boleh kosong',
+                'select_kota.required' => 'Kota / Kabupaten',
+                'kota.required' => 'Kota tidak boleh kosong',
+                'kecamatan.required' => 'Kecamatan tidak boleh kosong',
+                'alamat_lengkap.required' => 'Alamat tidak boleh kosong',
+                'nip.required' => 'NIP tidak boleh kosong',
+                'nip.min' => 'NIP minimal 11 karakter',
+                'nip.max' => 'NIP maksimal 11 karakter',
+                'nip.unique' => 'NIP sudah terdaftar',
+            ];
+
             $rules = [
                 'namaDepan' => 'required',
                 'kd_jabatan' => 'required',
@@ -286,7 +359,7 @@ class KaryawanController extends Controller
                 $rules['nip'] = 'required|min:11|max:11|unique:karyawan,nip';
             };
 
-            $input = $request->validate($rules);
+            $input = $request->validate($rules, $messages);
 
             // cek apakah nama belakang diisi
             if ($request->namaBelakang) {
