@@ -23,7 +23,7 @@
         <tbody>
           @foreach ($bahanMasuk as $masuk)
           <tr>
-            <td>{{ $masuk->kd_bahan }}</td>
+                                                                <td>{{ $masuk->kd_bahan }}</td>
             <td>{{ $masuk->nm_bahan }}</td>
             <td>{{ $masuk->tgl_masuk }}</td>
             <!-- format rupiah , , , -->

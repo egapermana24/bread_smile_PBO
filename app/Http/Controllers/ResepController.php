@@ -59,13 +59,21 @@ class ResepController extends Controller
      */
     public function store(Request $request)
     {
+        // mengubah nama validasi
+        $messages = [
+            'kd_resep.required' => 'Kode Resep tidak boleh kosong',
+            'kd_produk.required' => 'Kode Produk tidak boleh kosong',
+            'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+        ];
+
         // validasi form
         $request->validate([
             'kd_resep' => 'required',
             'kd_produk' => 'required',
             'kd_bahan' => 'required',
             'ket' => 'required',
-        ]);
+        ], $messages);
 
         // ambil data kd_bahan[] dan kd_produk[]
         $kd_bahan = $request->kd_bahan;

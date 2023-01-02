@@ -58,6 +58,20 @@ class DataBahanController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', DataBahan::class);
+        // mengubah nama validasi
+        $messages = [
+            'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'kd_bahan.min' => 'Kode Bahan minimal 3 karakter',
+            'kd_bahan.max' => 'Kode Bahan maksimal 10 karakter',
+            'nm_bahan.required' => 'Nama Bahan tidak boleh kosong',
+            'nm_bahan.min' => 'Nama Bahan minimal 3 karakter',
+            'nm_bahan.max' => 'Nama Bahan maksimal 50 karakter',
+            'harga_beli.required' => 'Harga Beli tidak boleh kosong',
+            'stok.required' => 'Stok tidak boleh kosong',
+            'stok.numeric' => 'Stok harus berupa angka',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+            'ket.min' => 'Keterangan minimal 3 karakter',
+        ];
 
         $request->validate([
             'kd_bahan' => 'required|min:3|max:10',
@@ -65,7 +79,7 @@ class DataBahanController extends Controller
             'harga_beli' => 'required',
             'stok' => 'required|numeric',
             'ket' => 'required|min:3',
-        ]);
+        ],  $messages);
 
         DataBahan::create($request->all());
 
@@ -100,6 +114,7 @@ class DataBahanController extends Controller
         // mengubah nama validasi
         $messages = [
             'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'nm_bahan.required' => 'Nama Bahan tidak boleh kosong',
             'nm_bahan.min' => 'Nama Bahan minimal 3 karakter',
             'nm_bahan.max' => 'Nama Bahan maksimal 50 karakter',
             'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
@@ -107,7 +122,7 @@ class DataBahanController extends Controller
             'harga_beli.integer' => 'Harga Beli harus berupa angka',
             'stok.required' => 'Stok tidak boleh kosong',
             'stok.integer' => 'Stok harus berupa angka',
-            'ket.min' => 'Keterangan tidak boleh kosong',
+            'ket.required' => 'Keterangan tidak boleh kosong',
             'ket.min' => 'Keterangan minimal 3 karakter',
         ];
 

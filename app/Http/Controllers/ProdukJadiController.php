@@ -43,6 +43,16 @@ class ProdukJadiController extends Controller
 
     public function store(Request $request)
     {
+        // mengubah nama validasi
+        $messages = [
+            'kd_produk.required' => 'Kode Produk tidak boleh kosong',
+            'nm_produk.required' => 'Nama Produk tidak boleh kosong',
+            'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
+            'harga_jual.required' => 'Harga Jual tidak boleh kosong',
+            'stok.required' => 'Stok tidak boleh kosong',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+        ];
+
         $request->validate([
             'kd_produk' => 'required',
             'nm_produk' => 'required',
@@ -50,7 +60,7 @@ class ProdukJadiController extends Controller
             'harga_jual' => 'required',
             'stok' => 'required',
             'ket' => 'required',
-        ]);
+        ], $messages);
 
         ProdukJadi::create($request->all());
 
@@ -83,6 +93,23 @@ class ProdukJadiController extends Controller
 
     public function update(Request $request, ProdukJadi $produkJadi)
     {
+        // mengubah nama validasi
+        $messages = [
+            'kd_produk.required' => 'Kode Produk tidak boleh kosong',
+            'nm_produk.required' => 'Nama Produk tidak boleh kosong',
+            'stok.required' => 'Stok tidak boleh kosong',
+            'stok.integer' => 'Stok harus berupa angka',
+            'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
+            'tgl_produksi.required' => 'Tanggal Produksi tidak boleh kosong',
+            'tgl_expired.required' => 'Tanggal Expired tidak boleh kosong',
+            'modal.required' => 'Modal tidak boleh kosong',
+            'modal.integer' => 'Modal harus berupa angka',
+            'harga_jual.required' => 'Harga Jual tidak boleh kosong',
+            'harga_jual.integer' => 'Harga Jual harus berupa angka',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+            'ket.min' => 'Keterangan minimal 3 karakter',
+        ];
+
         $request->validate([
             'kd_produk' => 'required',
             'nm_produk' => 'required',
@@ -93,7 +120,7 @@ class ProdukJadiController extends Controller
             'modal' => 'required|integer',
             'harga_jual' => 'required|integer',
             'ket' => 'required|min:3',
-        ]);
+        ], $messages);
 
         $produkJadi->update($request->all());
         Alert::success('Data Produk', 'Berhasil diubah!');

@@ -75,9 +75,14 @@ class SatuanController extends Controller
 
     public function update(Request $request, Satuan $satuan)
     {
+        // mengubah nama validasi
+        $messages = [
+            'nm_satuan.required' => 'Nama Satuan tidak boleh kosong',
+        ];
+
         $request->validate([
             'nm_satuan' => 'required'
-        ]);
+        ], $messages);
 
         $satuan->update($request->all());
         Alert::success('Data Satuan', 'Berhasil diubah!');
