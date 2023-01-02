@@ -59,34 +59,59 @@ class ResepController extends Controller
      */
     public function store(Request $request)
     {
-        // validasi form
-        $request->validate([
-            'kd_resep' => 'required',
-            'kd_produk' => 'required',
-            'kd_bahan' => 'required',
-            'ket' => 'required',
-        ]);
+        $kd_bahan = $request->input('kd_bahan'); // Ambil data array dari checkbox
+        $jumlah_dipilih = count($kd_bahan); // Hitung jumlah array
+        if ($jumlah_dipilih > 0) { // Jika ada checkbox yang dipilih
+            // menampilkan semua bahan yang dipilih
+            for ($x = 0; $x < $jumlah_dipilih; $x++) {
+                // menambahkan baris baru di database sesuai jumlah checkbox yang dipilih
+            
+                Resep::create([
+                    'kd_resep' => $request->kd_resep,
+                    'kd_produk' => $request->kd_produk,
+                    'kd_bahan' => $kd_bahan[$x],
+                    'ket' => $request->ket,
+                ]);
 
-        // ambil data kd_bahan[] dan kd_produk[]
-        $kd_bahan = $request->kd_bahan;
-        $kd_produk = $request->kd_produk;
 
-        // looping data kd_bahan[] dan kd_produk[]
-        for ($i = 0; $i < count($kd_bahan); $i++) {
-            // insert data ke tabel resep
-
-            dd($kd_bahan[$i]);
-            Resep::create([
-                'kd_resep' => $request->kd_resep,
-                'kd_produk' => $kd_produk[$i],
-                'kd_bahan' => $kd_bahan[$i],
-                'ket' => $request->ket,
-            ]);
+                Alert::success('Data Resep', 'Berhasil ditambahakan!');
+                return redirect('resep');
+            }
+        } else {
+            Alert::error('Data Resep', 'Gagal ditambahakan!');
+            return redirect('resep');
         }
-
-        Alert::success('Data Resep', 'Berhasil ditambahakan!');
-        return redirect('resep');
     }
+
+
+    // // validasi form
+    // $request->validate([
+    //     'kd_resep' => 'required',
+    //     'kd_produk' => 'required',
+    //     'kd_bahan' => 'required',
+    //     'ket' => 'required',
+    // ]);
+
+    // // ambil data kd_bahan[] dan kd_produk[]
+    // $kd_bahan = $request->kd_bahan;
+    // $kd_produk = $request->kd_produk;
+
+    // // looping data kd_bahan[] dan kd_produk[]
+    // for ($i = 0; $i < count($kd_bahan); $i++) {
+    //     // insert data ke tabel resep
+
+    //     dd($kd_bahan[$i]);
+    //     Resep::create([
+    //         'kd_resep' => $request->kd_resep,
+    //         'kd_produk' => $kd_produk[$i],
+    //         'kd_bahan' => $kd_bahan[$i],
+    //         'ket' => $request->ket,
+    //     ]);
+    // }
+
+    // Alert::success('Data Resep', 'Berhasil ditambahakan!');
+    // return redirect('resep');
+
 
     /**
      * Display the specified resource.

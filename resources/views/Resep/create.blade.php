@@ -29,15 +29,19 @@
           <select class="form-control" name="kd_produk" id="kd_produk">
             <option disabled hidden selected>-- Pilih Produk --</option>
             @foreach ($produkJadi as $produk)
+            @if (old('kd_produk') == $produk->kd_produk)
+            <option value="{{ $produk->kd_produk }}" selected>{{ $produk->nm_produk }}</option>
+            @else
             <option value="{{ $produk->kd_produk }}">{{ $produk->nm_produk }}</option>
+            @endif
             @endforeach
           </select>
         </div>
         <label for="kd_bahan">Bahan-bahan</label>
         @foreach ($dataBahan as $bahan )
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="{{ $bahan->kd_bahan }}" id="kd_bahan" name="kd_bahan[]">
-          <label class="form-check-label" for="kd_bahan">
+          <input class="form-check-input" type="checkbox" value="{{ $bahan->kd_bahan, old('kd_bahan[]') }}" name="kd_bahan[]">
+          <label class="form-check-label">
             {{ $bahan->nm_bahan }}
           </label>
         </div>
