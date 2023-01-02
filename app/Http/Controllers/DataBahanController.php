@@ -24,7 +24,7 @@ class DataBahanController extends Controller
     public function index()
     {
 
-        $this->authorize(DataBahan::class, 'viewAny');
+        $this->authorize('viewAny', DataBahan::class);
 
         // join tabel dengan tabel satuan
         $dataBahan = DataBahan::join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')
@@ -58,6 +58,7 @@ class DataBahanController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', DataBahan::class);
+
         // mengubah nama validasi
         $messages = [
             'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',

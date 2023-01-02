@@ -15,6 +15,9 @@ class SatuanController extends Controller
      */
     public function index()
     {
+
+        $this->authorize('viewAny', Satuan::class);
+
         $satuan = Satuan::all();
 
         // mengirim tittle dan judul ke view
@@ -32,6 +35,8 @@ class SatuanController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', Satuan::class);
+
         // mengubah error ke bahasa indonesia
         $messages = [
             'required' => ':attribute tidak boleh kosong',
@@ -61,6 +66,9 @@ class SatuanController extends Controller
 
     public function edit(Satuan $satuan)
     {
+
+        $this->authorize('update', $satuan);
+
         return view(
             'satuan.edit',
             compact('satuan'),
@@ -75,10 +83,13 @@ class SatuanController extends Controller
 
     public function update(Request $request, Satuan $satuan)
     {
+        $this->authorize('update', $satuan);
+
         // mengubah nama validasi
         $messages = [
             'nm_satuan.required' => 'Nama Satuan tidak boleh kosong',
         ];
+
 
         $request->validate([
             'nm_satuan' => 'required'
@@ -91,6 +102,8 @@ class SatuanController extends Controller
 
     public function destroy(Satuan $satuan)
     {
+        $this->authorize('delete', $satuan);
+
         $satuan->delete();
         Alert::success('Data Satuan', 'Berhasil dihapus!');
         return redirect('satuan');

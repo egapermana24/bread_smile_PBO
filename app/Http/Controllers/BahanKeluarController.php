@@ -12,6 +12,8 @@ class BahanKeluarController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny', bahanKeluar::class);
+
         // join table bahan keluar dan data bahan
         $bahanKeluar = BahanKeluar::join('dataBahan', 'bahanKeluar.kd_bahan', '=', 'dataBahan.kd_bahan')->join('satuan', 'dataBahan.kd_satuan', '=', 'satuan.id_satuan')
             ->select('bahanKeluar.*', 'dataBahan.nm_bahan', 'dataBahan.kd_satuan', 'dataBahan.harga_beli', 'satuan.nm_satuan')
@@ -33,6 +35,8 @@ class BahanKeluarController extends Controller
 
     public function create()
     {
+        $this->authorize('create', bahanKeluar::class);
+
         // join dengan tabel satuan
         $dataBahan = DataBahan::join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')
             ->select('databahan.*', 'satuan.nm_satuan')
@@ -53,6 +57,8 @@ class BahanKeluarController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', bahanKeluar::class);
+
         // stok bahan berkurang
         $stok = DataBahan::where('kd_bahan', $request->kd_bahan)->first();
         $stok->stok = $stok->stok - $request->jumlah;
@@ -104,6 +110,8 @@ class BahanKeluarController extends Controller
 
     public function edit(bahanKeluar $bahanKeluar)
     {
+        $this->authorize('update', $bahanKeluar);
+
         // join tabel satuan
         $dataBahan = DataBahan::join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')
             ->select('databahan.*', 'satuan.nm_satuan')
@@ -125,6 +133,8 @@ class BahanKeluarController extends Controller
 
     public function update(Request $request, bahanKeluar $bahanKeluar)
     {
+        $this->authorize('update', $bahanKeluar);
+
         // cek apakah bahannya di ubah
         if ($request->has('kd_bahan')) {
 
@@ -220,6 +230,8 @@ class BahanKeluarController extends Controller
 
     public function destroy(bahanKeluar $bahanKeluar)
     {
+        $this->authorize('delete', $bahanKeluar);
+
         // update stok bahan
         $stok = DataBahan::where('kd_bahan', $bahanKeluar->kd_bahan)->first();
         $stok->stok = $stok->stok + $bahanKeluar->jumlah;

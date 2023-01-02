@@ -2,9 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\DataBahan;
 use App\Models\User;
-use App\Policies\DataBahanPolicy;
 use Illuminate\Support\Facades\Gate;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -18,7 +16,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Models\DataBahan' => 'App\Policies\DataBahanPolicy',
-        DataBahan::class => DataBahanPolicy::class
+        'App\Models\Satuan' => 'App\Policies\SatuanMassaPolicy',
+        'App\Models\BahanMasuk' => 'App\Policies\BahanMasukPolicy',
+        'App\Models\BahanKeluar' => 'App\Policies\BahanKeluarPolicy'
     ];
 
     /**
