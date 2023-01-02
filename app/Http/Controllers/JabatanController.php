@@ -73,9 +73,18 @@ class JabatanController extends Controller
 
     public function update(Request $request, Jabatan $jabatan)
     {
+        // mengubah error ke bahasa indonesia
+        $messages = [
+            'required' => ':attribute tidak boleh kosong',
+        ];
+
+        $errors = [
+            'nm_jabatan' => 'Nama Jabatan',
+        ];
+
         $request->validate([
             'nm_jabatan' => 'required'
-        ]);
+        ], $messages, $errors);
 
         $jabatan->update($request->all());
         Alert::success('Data Jabatan', 'Berhasil diubah!');
