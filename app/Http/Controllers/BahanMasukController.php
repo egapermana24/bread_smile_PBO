@@ -67,13 +67,22 @@ class BahanMasukController extends Controller
         // mencari total harga
         $total = $harga_beli * $jumlah;
 
+        // mengubah nama validasi
+        $messages = [
+            'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'nm_bahan.required' => 'Nama Bahan tidak boleh kosong',
+            'tgl_masuk.required' => 'Tanggal Masuk tidak boleh kosong',
+            'jumlah.required' => 'Jumlah tidak boleh kosong',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+        ];
+
         $request->validate([
             'kd_bahan' => 'required',
             'nm_bahan' => 'required',
             'tgl_masuk' => 'required',
             'jumlah' => 'required',
             'ket' => 'required',
-        ]);
+        ], $messages);
 
         BahanMasuk::create([
             'kd_bahan' => $request->kd_bahan,
@@ -139,12 +148,21 @@ class BahanMasukController extends Controller
             $harga_beli = (int) $stok->harga_beli;
             $jumlah = (int) $request->jumlah;
 
+            // mengubah nama validasi
+            $messages = [
+                'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+                'jumlah.required' => 'Jumlah tidak boleh kosong',
+                'tgl_masuk.required' => 'Tanggal Masuk tidak boleh kosong',
+                'ket.required' => 'Keterangan tidak boleh kosong',
+                'ket.min' => 'Keterangan minimal 3 karakter',
+            ];
+
             $request->validate([
                 'kd_bahan' => 'required',
                 'jumlah' => 'required',
                 'tgl_masuk' => 'required',
                 'ket' => 'required|min:3',
-            ]);
+            ], $messages);
 
             $input = $request->all();
 
@@ -157,12 +175,21 @@ class BahanMasukController extends Controller
             Alert::success('Data Pembelian', 'Berhasil diubah!');
             return redirect('bahanMasuk');
         } else {
+            // mengubah nama validasi
+            $messages = [
+                'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+                'jumlah.required' => 'Jumlah tidak boleh kosong',
+                'tgl_masuk.required' => 'Tanggal Masuk tidak boleh kosong',
+                'ket.required' => 'Keterangan tidak boleh kosong',
+                'ket.min' => 'Keterangan minimal 3 karakter',
+            ];
+
             $request->validate([
                 'kd_bahan' => 'required',
                 'jumlah' => 'required',
                 'tgl_masuk' => 'required',
                 'ket' => 'required|min:3',
-            ]);
+            ], $messages);
 
             if ($request->has('jumlah')) {
 
