@@ -14,6 +14,7 @@
           @foreach ($errors->all() as $error)
           <li>{{ $error }}</li>
           @endforeach
+          
         </ul>
         <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
       </div>
@@ -37,19 +38,20 @@
             @endforeach
           </select>
         </div>
-        <label for="kd_bahan">Bahan-bahan</label>
+        <label for="bahan">Bahan-bahan</label>
+        <br>
+        <span class="text-danger">*ceklis bahan yang dipilih</span>
         @foreach ($dataBahan as $bahan )
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="{{ $bahan->kd_bahan, old('kd_bahan[]') }}" name="kd_bahan[]">
-          <label class="form-check-label">
-            {{ $bahan->nm_bahan }}
-          </label>
+        <div class="input-group mb-2">
+          <div class="input-group-text">
+            <input class="form-check-input mt-0" type="checkbox" value="{{ $bahan->nm_bahan }}" name="nm_bahan[]">
+          </div>
+          <input type="text" class="form-control" value="{{ $bahan->nm_bahan }}" readonly>
+          <input type="number" class="form-control" placeholder="jumlah" value="{{ old('jumlah') }}" name="jumlah[]">
+          <input type="text" class="form-control" value="{{ $bahan->nm_satuan }}" readonly name="nm_satuan[]">
+
         </div>
         @endforeach
-        <div class="form-group">
-          <label for="ket">Keterangan</label>
-          <textarea type="text" class="form-control" name="ket" id="ket" placeholder="Masukkan Keterangan"></textarea>
-        </div>
         <button type="submit" class="btn btn-primary mb-3">Simpan</button>
         <button type="reset" class="btn btn-danger mb-3">Reset</button>
       </form>

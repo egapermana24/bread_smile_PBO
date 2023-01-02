@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Resep;
 use App\Models\DataBahan;
 use App\Models\ProdukJadi;
+use App\Models\Satuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ResepController extends Controller
@@ -18,11 +20,12 @@ class ResepController extends Controller
     public function index()
     {
         // join tabel dengan produkJadi dan dataBahan
-        $resep = Resep::join('produkJadi', 'resep.kd_produk', '=', 'produkJadi.kd_produk')
-            ->join('databahan', 'resep.kd_bahan', '=', 'databahan.kd_bahan')
-            ->select('resep.*', 'produkJadi.nm_produk', 'databahan.nm_bahan')
-            ->get();
+        // $resep = Resep::join('produkJadi', 'resep.kd_produk', '=', 'produkJadi.kd_produk')
+        //     ->join('databahan', 'resep.kd_bahan', '=', 'databahan.kd_bahan')
+        //     ->select('resep.*', 'produkJadi.nm_produk', 'databahan.nm_bahan')
+        //     ->get();
 
+        $resep = Resep::all();
         return view('resep.index', ['resep' => $resep], ['tittle' => 'Data Resep', 'judul' => 'Data Resep', 'menu' => 'Resep', 'submenu' => 'Data Resep']);
     }
 
@@ -38,8 +41,9 @@ class ResepController extends Controller
         $kode_otomatis = $kode_otomatis + 1;
         $kode_otomatis = "RSP" . sprintf("%03s", $kode_otomatis);
 
-
-        $dataBahan = DataBahan::all();
+        $dataBahan = DataBahan::join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')
+            ->select('databahan.*', 'satuan.nm_satuan')
+            ->get();
         $produkJadi = ProdukJadi::all();
         //join tabel dengan tabel produk dan tabel bahan
         $resep = Resep::all();
@@ -59,58 +63,67 @@ class ResepController extends Controller
      */
     public function store(Request $request)
     {
-        $kd_bahan = $request->input('kd_bahan'); // Ambil data array dari checkbox
-        $jumlah_dipilih = count($kd_bahan); // Hitung jumlah array
-        if ($jumlah_dipilih > 0) { // Jika ada checkbox yang dipilih
-            // menampilkan semua bahan yang dipilih
-            for ($x = 0; $x < $jumlah_dipilih; $x++) {
-                // menambahkan baris baru di database sesuai jumlah checkbox yang dipilih
-            
-                Resep::create([
-                    'kd_resep' => $request->kd_resep,
-                    'kd_produk' => $request->kd_produk,
-                    'kd_bahan' => $kd_bahan[$x],
-                    'ket' => $request->ket,
-                ]);
+        $kd_produk = $request->kd_produk;
+        $nm_bahan = $request->input('nm_bahan');
+        $jumlah = $request->input('jumlah');
+        $nm_satuan = $request->input('nm_satuan');
 
+        dd($kd_produk, $nm_bahan, $jumlah, $nm_satuan);
 
-                Alert::success('Data Resep', 'Berhasil ditambahakan!');
-                return redirect('resep');
-            }
+        if ($kd_produk == !null) {
+            // menampilkan $nm_satuan berdasarkan $nm_bahan yang dipilih
+            $nm_satuan = array_intersect_key($nm_satuan, $nm_bahan);
+
+            // menghilangkan null pada array
+            $jumlah = array_intersect_key($jumlah, $nm_bahan);
+
+            // menggabungkan 2 array berdasarkan index yang sama dan ubah menjadi string
+            $bahan = array_map(function ($nm_bahan, $jumlah, $nm_satuan) {
+                return $nm_bahan . ' ' . '(' . $jumlah . ' ' . $nm_satuan . ')';
+            }, $nm_bahan, $jumlah, $nm_satuan);
+
+            // mengubah array menjadi string
+            $bahan = implode(', ', $bahan);
         } else {
             Alert::error('Data Resep', 'Gagal ditambahakan!');
-            return redirect('resep');
+            return redirect()->route('resep.create')->withInput();
         }
+        Alert::error('Data Resep', 'Gagal ditambahakan!');
+        return redirect()->route('resep.create')->withInput();
+
+
+
+
+
+
+
+        // METODE LAMA
+        // $kd_resep = $request->kd_resep;
+        // $kd_bahan = $request->input('kd_bahan');
+        // $message = [
+        //     'kd_bahan.required' => 'Pilih minimal 1 bahan',
+        // ];
+
+        // $request->validate([
+        //     'kd_bahan' => 'required',
+        // ], $message);
+        // if (!empty($kd_bahan)) { // Jika ada checkbox yang dipilih
+        //     $will_insert = []; // Buat array kosong
+        //     foreach ($kd_bahan as $key => $value) { // Lakukan looping pada array checkbox
+        //         array_push($will_insert, ['kd_bahan' => $value]);
+        //     }
+
+        //     // masukkan semua data ke tabel resep
+
+        //     DB::table('resep')->insert(['kd_resep' => $kd_resep, 'kd_bahan' => $will_insert]);
+
+        //     Alert::success('Data Resep', 'Berhasil ditambahakan!');
+        //     return redirect('resep');
+        // } else {
+        //     Alert::error('Data Resep', 'Gagal ditambahakan!');
+        //     return redirect('resep');
+        // }
     }
-
-
-    // // validasi form
-    // $request->validate([
-    //     'kd_resep' => 'required',
-    //     'kd_produk' => 'required',
-    //     'kd_bahan' => 'required',
-    //     'ket' => 'required',
-    // ]);
-
-    // // ambil data kd_bahan[] dan kd_produk[]
-    // $kd_bahan = $request->kd_bahan;
-    // $kd_produk = $request->kd_produk;
-
-    // // looping data kd_bahan[] dan kd_produk[]
-    // for ($i = 0; $i < count($kd_bahan); $i++) {
-    //     // insert data ke tabel resep
-
-    //     dd($kd_bahan[$i]);
-    //     Resep::create([
-    //         'kd_resep' => $request->kd_resep,
-    //         'kd_produk' => $kd_produk[$i],
-    //         'kd_bahan' => $kd_bahan[$i],
-    //         'ket' => $request->ket,
-    //     ]);
-    // }
-
-    // Alert::success('Data Resep', 'Berhasil ditambahakan!');
-    // return redirect('resep');
 
 
     /**
@@ -155,6 +168,9 @@ class ResepController extends Controller
      */
     public function destroy(Resep $resep)
     {
-        //
+        // hapus data resep
+        Resep::destroy($resep->kd_resep);
+        Alert::success('Data Resep', 'Berhasil dihapus!');
+        return redirect('resep');
     }
 }

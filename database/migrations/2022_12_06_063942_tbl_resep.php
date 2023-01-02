@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('Resep', function (Blueprint $table) {
             $table->string('kd_resep', 10)->primary();
             $table->string('kd_produk', 10);
-            $table->string('kd_bahan');
-            $table->string('ket');
+            $table->string('bahan', 255);
             $table->timestamps();
         });
     }

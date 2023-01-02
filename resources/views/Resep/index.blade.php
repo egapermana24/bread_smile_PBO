@@ -18,9 +18,9 @@
         <thead>
           <tr>
             <th>Kode Resep</th>
-            <th>Nama Produk</th>
+            <!-- <th>Nama Produk</th> -->
             <th>Bahan-bahan</th>
-            <th>Keterangan</th>
+            <!-- <th>Keterangan</th> -->
             <th>Aksi</th>
           </tr>
         </thead>
@@ -28,9 +28,9 @@
           @foreach ($resep as $r)
           <tr>
             <td>{{ $r->kd_resep }}</td>
-            <td>{{ $r->kd_produk }}</td>
+            <!-- <td>{{ $r->kd_produk }}</td> -->
             <td>{{ $r->kd_bahan }}</td>
-            <td>{{ $r->ket }}</td>
+            <!-- <td>{{ $r->ket }}</td> -->
             <td>
               <a href="" class="btn btn-sm btn-warning">Edit</a>
               <form action="{{ route('resep.destroy', $r->kd_resep) }}" method="POST">
