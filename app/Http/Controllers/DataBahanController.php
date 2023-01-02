@@ -46,14 +46,15 @@ class DataBahanController extends Controller
         // mengubah nama validasi
         $messages = [
             'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'kd_bahan.min' => 'Kode Bahan minimal 3 karakter',
+            'kd_bahan.max' => 'Kode Bahan maksimal 10 karakter',
+            'nm_bahan.required' => 'Nama Bahan tidak boleh kosong',
             'nm_bahan.min' => 'Nama Bahan minimal 3 karakter',
             'nm_bahan.max' => 'Nama Bahan maksimal 50 karakter',
-            'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
             'harga_beli.required' => 'Harga Beli tidak boleh kosong',
-            'harga_beli.integer' => 'Harga Beli harus berupa angka',
             'stok.required' => 'Stok tidak boleh kosong',
-            'stok.integer' => 'Stok harus berupa angka',
-            'ket.min' => 'Keterangan tidak boleh kosong',
+            'stok.numeric' => 'Stok harus berupa angka',
+            'ket.required' => 'Keterangan tidak boleh kosong',
             'ket.min' => 'Keterangan minimal 3 karakter',
         ];
 
@@ -95,6 +96,7 @@ class DataBahanController extends Controller
         // mengubah nama validasi
         $messages = [
             'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'nm_bahan.required' => 'Nama Bahan tidak boleh kosong',
             'nm_bahan.min' => 'Nama Bahan minimal 3 karakter',
             'nm_bahan.max' => 'Nama Bahan maksimal 50 karakter',
             'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
@@ -102,7 +104,7 @@ class DataBahanController extends Controller
             'harga_beli.integer' => 'Harga Beli harus berupa angka',
             'stok.required' => 'Stok tidak boleh kosong',
             'stok.integer' => 'Stok harus berupa angka',
-            'ket.min' => 'Keterangan tidak boleh kosong',
+            'ket.required' => 'Keterangan tidak boleh kosong',
             'ket.min' => 'Keterangan minimal 3 karakter',
         ];
 
