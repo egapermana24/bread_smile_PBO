@@ -39,12 +39,21 @@ class MobilController extends Controller
 
     public function store(Request $request)
     {
+        // mengubah nama validasi
+        $messages = [
+            'kd_mobil.required' => 'Kode Mobil tidak boleh kosong',
+            'merk.required' => 'Merk tidak boleh kosong',
+            'plat_nomor.required' => 'Plat Nomor tidak boleh kosong',
+            'plat_nomor.unique' => 'Plat Nomor sudah terdaftar',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+        ];
+
         $request->validate([
             'kd_mobil' => 'required',
             'merk' => 'required',
             'plat_nomor' => 'required|unique:mobil,plat_nomor',
             'ket' => 'required'
-        ]);
+        ], $messages);
 
         Mobil::create($request->all());
 
@@ -74,6 +83,15 @@ class MobilController extends Controller
 
     public function update(Request $request, Mobil $mobil)
     {
+        // mengubah nama validasi
+        $messages = [
+            'kd_mobil.required' => 'Kode Mobil tidak boleh kosong',
+            'merk.required' => 'Merk tidak boleh kosong',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+            'plat_nomor.required' => 'Plat Nomor tidak boleh kosong',
+            'plat_nomor.unique' => 'Plat Nomor sudah terdaftar',
+        ];
+
         $rules = [
             'kd_mobil' => 'required',
             'merk' => 'required',
@@ -84,7 +102,7 @@ class MobilController extends Controller
             $rules['plat_nomor'] = 'required|unique:mobil,plat_nomor';
         };
 
-        $validateData = $request->validate($rules);
+        $validateData = $request->validate($rules, $messages);
         $mobil->update($validateData);
         Alert::success('Data Mobil', 'Berhasil diubah!');
         return redirect('mobil');
