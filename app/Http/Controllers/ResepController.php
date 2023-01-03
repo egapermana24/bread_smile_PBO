@@ -63,12 +63,15 @@ class ResepController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->kd_produk == '' || $request->nm_bahan == '' || $request->jumlah == '' || $request->nm_satuan == '') {
+            Alert::error('Data Resep', 'Gagal ditambahakan!');
+            return redirect()->route('resep.create')->withInput();
+        }
+
         $kd_produk = $request->kd_produk;
         $nm_bahan = $request->input('nm_bahan');
         $jumlah = $request->input('jumlah');
         $nm_satuan = $request->input('nm_satuan');
-
-        dd($kd_produk, $nm_bahan, $jumlah, $nm_satuan);
 
         if ($kd_produk == !null) {
             // menampilkan $nm_satuan berdasarkan $nm_bahan yang dipilih
@@ -84,6 +87,11 @@ class ResepController extends Controller
 
             // mengubah array menjadi string
             $bahan = implode(', ', $bahan);
+
+            dd($bahan);
+        } elseif (htmlspecialchars(array_key_exists('nm_bahan', $request->input()))) {
+            Alert::error('Data Resep', 'Gagal ditambahakan!');
+            return redirect()->route('resep.create')->withInput();
         } else {
             Alert::error('Data Resep', 'Gagal ditambahakan!');
             return redirect()->route('resep.create')->withInput();
