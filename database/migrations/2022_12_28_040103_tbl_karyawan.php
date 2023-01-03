@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('ttl');
             $table->string('no_telp', 15);
             $table->text('alamat');
+            $table->string('role', 20);
             $table->text('foto');
 
             $table->timestamps();

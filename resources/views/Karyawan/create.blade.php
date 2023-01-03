@@ -158,6 +158,23 @@
         </div>
 
         <div class="form-group">
+          <label for="role">Login Sebagai</label>
+          <select class="form-control" name="role" id="role" required>
+            <option disabled hidden selected>-- Silahkan Pilih --</option>
+            <option value="backoffice">Backoffice</option>
+            <option value="gudang">Gudang</option>
+            <option value="produksi">Produksi</option>
+            <option value="distribusi">Distribusi</option>
+          </select>
+          @error('role')
+          <div class="text-danger mt-2 mx-1">
+            {{ $message }}
+          </div>
+          @enderror
+        </div>
+
+
+        <div class="form-group">
           <label for="foto">Foto</label>
           <div class="card" style="width: 10rem;">
             <img src="" class="card-img-top" id="output">

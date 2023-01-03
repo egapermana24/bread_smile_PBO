@@ -70,6 +70,7 @@ class KaryawanController extends Controller
             'kota.required' => 'Kota tidak boleh kosong',
             'kecamatan.required' => 'Kecamatan tidak boleh kosong',
             'alamat_lengkap.required' => 'Alamat tidak boleh kosong',
+            'role.required' => 'Harap tentukan dia login sebagai apa!',
             'foto.required' => 'Foto tidak boleh kosong',
             'foto.images' => 'File yang anda pilih bukan foto atau gambar',
             'foto.mimes' => 'File atau Foto harus berupa jpeg,png,jpg,gif,svg,webp',
@@ -88,6 +89,7 @@ class KaryawanController extends Controller
             'kota' => 'required',
             'kecamatan' => 'required',
             'alamat_lengkap' => 'required',
+            'role' => 'required',
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
         ], $messages);
 
@@ -137,6 +139,7 @@ class KaryawanController extends Controller
             'ttl' => $ttl,
             'no_telp' => $no_telp,
             'alamat' => $alamat,
+            'role' => $request->role,
             'foto' => $foto
         ]);
 
@@ -245,6 +248,7 @@ class KaryawanController extends Controller
                 'kota.required' => 'Kota tidak boleh kosong',
                 'kecamatan.required' => 'Kecamatan tidak boleh kosong',
                 'alamat_lengkap.required' => 'Alamat tidak boleh kosong',
+                'role.required' => 'Harap tentukan dia login sebagai apa!',
                 'foto.required' => 'Foto tidak boleh kosong',
                 'foto.images' => 'File yang anda pilih bukan foto atau gambar',
                 'foto.mimes' => 'File atau Foto harus berupa jpeg,png,jpg,gif,svg,webp',
@@ -266,6 +270,7 @@ class KaryawanController extends Controller
                 'kota' => 'required',
                 'kecamatan' => 'required',
                 'alamat_lengkap' => 'required',
+                'role' => 'required',
                 'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
             ];
 
@@ -337,6 +342,7 @@ class KaryawanController extends Controller
                 'nip.min' => 'NIP minimal 11 karakter',
                 'nip.max' => 'NIP maksimal 11 karakter',
                 'nip.unique' => 'NIP sudah terdaftar',
+                'role.required' => 'Harap tentukan dia login sebagai apa!',
             ];
 
             $rules = [
@@ -350,6 +356,7 @@ class KaryawanController extends Controller
                 'select_kota' => 'required',
                 'kota' => 'required',
                 'kecamatan' => 'required',
+                'role' => 'required',
                 'alamat_lengkap' => 'required'
             ];
 
