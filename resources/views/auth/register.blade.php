@@ -1,101 +1,71 @@
-@extends('layout')
-
-@section('content')
-
-<div class="container">
-  <div class="row">
-
-    <div class="register-box col-lg-5 col-md-8 col-sm-11 mb-5 mx-auto">
-      <div class="register-logo">
-        <b>Silahkan Mendaftar</b>
-      </div>
-
-      <div class="card">
-        <div class="card-body register-card-body">
-          <p class="login-box-msg">Masukkan datamu dengan benar</p>
-
-          <form action="/register" method="post" class="needs-validation">
-            @csrf
-            <div class="input-group">
-
-              <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Nama Lengkap" name="name" value="{{ old('name') }}">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-user"></span>
-                </div>
-              </div>
-            </div>
-            @error('name')
-            <div class="text-danger mx-1">
-              {{ $message }}
-            </div>
-            @enderror
-
-            <div class="input-group mt-3">
-              <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" name="email" value="{{ old('email') }}">
-              <div class=" input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-envelope"></span>
-                </div>
-              </div>
-            </div>
-            @error('email')
-            <div class="text-danger mx-1">
-              {{ $message }}
-            </div>
-            @enderror
-            <div class="input-group mt-3">
-              <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" name="password">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-lock"></span>
-                </div>
-              </div>
-            </div>
-            @error('password')
-            <div class="text-danger mx-1">
-              {{ $message }}
-            </div>
-            @enderror
-            <div class="input-group mt-3">
-              <input type="password" class="form-control @error('rePassword') is-invalid @enderror" placeholder="Ulangi password" name="rePassword">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-lock"></span>
-                </div>
-              </div>
-            </div>
-            @error('rePassword')
-            <div class="text-danger mx-1">
-              {{ $message }}
-            </div>
-            @enderror
-            <div class="row mt-3">
-              <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-block">Daftar</button>
-              </div>
-              <!-- /.col -->
-            </div>
-          </form>
-
-          <div class="social-auth-links text-center">
-            <p>- Atau -</p>
-            <a href="#" class="btn btn-block btn-primary">
-              <i class="fab fa-facebook mr-2"></i>
-              Daftar dengan Facebook
-            </a>
-            <a href="#" class="btn btn-block btn-danger">
-              <i class="fab fa-google-plus mr-2"></i>
-              Daftar dengan Google+
-            </a>
-          </div>
-          <a href="/login" class="text-center">Sudah Menjadi Anggota</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Registration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      @if (session()->has('registerError'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('registerError') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <!-- /.form-box -->
-      </div><!-- /.card -->
+      @endif
+        <main class="form-registration w-100 m-auto mt-5">
+            <form action="/register" method="POST">
+                @csrf
+                <h1 class="h3 mb-3 fw-normal text-center">Registration Form</h1>
+                
+                <div class="form-floating">
+                    <input type="text" class="form-control @error('nip') is-invalid @enderror" name="nip" id="nip" value="{{ old('nip') }}" placeholder="Nip" required>
+                    <label for="nip">Nip</label>
+                    @error('nip')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+                <div class="form-floating mt-2">
+                    <input type="text" class="form-control @error('nm_karyawan') is-invalid @enderror" name="nm_karyawan" id="nm_karyawan" value="{{ old('nm_karyawan') }}" placeholder="Nama Lengkap" required>
+                    <label for="nm_karyawan">Nama Lengkap</label>
+                    @error('nm_karyawan')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="row mt-5">
+                  <div class="form-floating px-1 col-6">
+                    <input type="password" class="form-control rounded-bottom @error('password') is-invalid @enderror" name="password" id="password" placeholder="Password" required>
+                    <label for="password">Password</label>
+                    @error('password')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+                <div class="form-floating px-1 col-6">
+                  <input type="password" class="form-control rounded-bottom @error('rePassword') is-invalid @enderror" name="rePassword" id="rePassword" placeholder="Konfirmasi Password" required>
+                  <label for="rePassword">Konfirmasi Password</label>
+                  @error('rePassword')
+                      <div class="invalid-feedback">
+                          {{ $message }}
+                      </div>
+                  @enderror
+              </div>
+                </div>
+                
+                <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Register</button>
+            </form>
+            <small class="d-block text-center mt-3">Already register? <a href="/login" class="text-decoration-none">Login Now!</a></small>
+        </main>
     </div>
-
-  </div>
 </div>
-
-@endsection
+</body>
+</html>

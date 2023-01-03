@@ -110,8 +110,8 @@
                     @csrf
                     <h1 class="h3 mb-3 fw-normal text-center">Please Login</h1>
                     <div class="form-floating">
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" autofocus required>
-                        <label for="email">Email</label>
+                        <input type="text" class="form-control" name="nip" id="nip" placeholder="nip" autofocus required>
+                        <label for="nip">Nip</label>
                     </div>
                     <div class="form-floating">
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>

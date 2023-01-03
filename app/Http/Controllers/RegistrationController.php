@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Karyawan;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
@@ -27,37 +28,56 @@ class RegistrationController extends Controller
     public function store(Request $request)
     {
 
-        // mengubah nama validasi
-        $messages = [
-            'name.required' => 'Nama tidak boleh kosong',
-            'name.min' => 'Nama minimal 3 karakter',
-            'name.max' => 'Nama maksimal 50 karakter',
-            'name.string' => 'Nama harus berupa huruf',
-            'email.required' => 'Email tidak boleh kosong',
-            'email.email' => 'Email tidak valid',
-            'email.unique' => 'Email sudah terdaftar',
-            'password.required' => 'Password tidak boleh kosong',
-            'password.min' => 'Password minimal 8 karakter',
-            'password.max' => 'Password maksimal 16 karakter',
-            'rePassword.required' => 'Konfirmasi Password tidak boleh kosong',
-            'rePassword.same' => 'Password tidak sama',
-        ];
+        $karyawan = Karyawan::where('nip', $request->nip)->first();
+        if (!empty($karyawan) || $karyawan == !null) {
 
-        $request->validate([
-            'name' => 'required|string|min:3|max:50',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|max:16',
-            'rePassword' => 'required|same:password',
-        ], $messages);
+            // cek apakah user itu terdaftar pada tabel karyawan
+            if ($request->nip === $karyawan->nip && $request->nm_karyawan === $karyawan->nm_karyawan) {
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
+                $nip = $karyawan->nip;
+                $name = $karyawan->nm_karyawan;
+                $role = $karyawan->role;
 
-        User::create($input);
+                // mengubah nama validasi
+                $messages = [
+                    'nip.required' => 'Nip tidak boleh kosong',
+                    'nip.unique' => 'Nip sudah terdaftar',
+                    'nm_karyawan.required' => 'Nama tidak boleh kosong',
+                    'nm_karyawan.unique' => 'Nama sudah terdaftar',
+                    'password.required' => 'Password tidak boleh kosong',
+                    'password.min' => 'Password minimal 8 karakter',
+                    'password.max' => 'Password maksimal 16 karakter',
+                    'rePassword.required' => 'Konfirmasi Password tidak boleh kosong',
+                    'rePassword.same' => 'Password tidak sama'
+                ];
 
+                $request->validate([
+                    'nip' => 'required|unique:users,nip',
+                    'nm_karyawan' => 'required|unique:users,name',
+                    'password' => 'required|min:8|max:16',
+                    'rePassword' => 'required|same:password',
+                ], $messages);
 
-        Alert::success('Registrasi Berhasil', 'Silahkan Login!');
-        return redirect('login')->with('status', 'Registrasi Berhasil, Silahkan Login!');
+                $input = $request->all();
+
+                $input['password'] = bcrypt($input['password']);
+
+                User::create([
+                    'name' => $name,
+                    'nip' => $nip,
+                    'password' => $input['password'],
+                    'role' => $role
+                ]);
+
+                Alert::success('Registrasi Berhasil', 'Silahkan Login!');
+                return redirect('login');
+            } else {
+                return back()->with('registerError', 'NIP dan Nama tidak terdaftar!');
+            }
+        } else {
+            Alert::error('Registrasi Gagal', 'Silahkan Registrasi Ulang!');
+            return redirect('register');
+        }
     }
 
     public function login()
@@ -70,17 +90,16 @@ class RegistrationController extends Controller
     public function loginStore(Request $request)
     {
         $messages = [
-            'email.required' => 'Email tidak boleh kosong',
-            'email.email' => 'Email tidak valid',
+            'nip.required' => 'NIP tidak boleh kosong',
             'password.required' => 'Password tidak boleh kosong',
         ];
 
         $request->validate([
-            'email' => 'required|email:dns',
+            'nip' => 'required',
             'password' => 'required',
         ], $messages);
 
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('nip', 'password');
 
         // pesan error jika email dan password tidak sesuai dengan data di database
 
