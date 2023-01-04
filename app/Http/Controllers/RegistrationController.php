@@ -14,6 +14,8 @@ class RegistrationController extends Controller
     public function index()
     {
 
+        $karyawan = Karyawan::all();
+
         return view(
             'auth.register',
             [
@@ -21,14 +23,36 @@ class RegistrationController extends Controller
                 'judul' => '',
                 'menu' => '',
                 'submenu' => ''
-            ]
+            ],
+            compact('karyawan')
         );
     }
 
     public function store(Request $request)
     {
-
         $karyawan = Karyawan::where('nip', $request->nip)->first();
+        $userNip = User::where('nip', $request->nip)->first();
+        $userPass = User::where('password', $request->password)->first();
+        // mengubah nama validasi
+        $messages = [
+            'nip.required' => 'Nip tidak boleh kosong',
+            'nip.unique' => 'Nip ini sudah memiliki akun, silahkan login!',
+            'nm_karyawan.required' => 'Nama tidak boleh kosong',
+            'nm_karyawan.unique' => 'Nama sudah terdaftar',
+            'password.required' => 'Password tidak boleh kosong',
+            'password.min' => 'Password minimal 8 karakter',
+            'password.max' => 'Password maksimal 16 karakter',
+            'rePassword.required' => 'Konfirmasi Password tidak boleh kosong',
+            'rePassword.same' => 'Konfirmasi Password tidak sama'
+        ];
+
+        $request->validate([
+            'nip' => 'required|unique:users,nip',
+            'nm_karyawan' => 'required',
+            'password' => 'required|min:8|max:16',
+            'rePassword' => 'required|same:password',
+        ], $messages);
+
         if (!empty($karyawan) || $karyawan == !null) {
 
             // cek apakah user itu terdaftar pada tabel karyawan
@@ -37,26 +61,6 @@ class RegistrationController extends Controller
                 $nip = $karyawan->nip;
                 $name = $karyawan->nm_karyawan;
                 $role = $karyawan->role;
-
-                // mengubah nama validasi
-                $messages = [
-                    'nip.required' => 'Nip tidak boleh kosong',
-                    'nip.unique' => 'Nip sudah terdaftar',
-                    'nm_karyawan.required' => 'Nama tidak boleh kosong',
-                    'nm_karyawan.unique' => 'Nama sudah terdaftar',
-                    'password.required' => 'Password tidak boleh kosong',
-                    'password.min' => 'Password minimal 8 karakter',
-                    'password.max' => 'Password maksimal 16 karakter',
-                    'rePassword.required' => 'Konfirmasi Password tidak boleh kosong',
-                    'rePassword.same' => 'Password tidak sama'
-                ];
-
-                $request->validate([
-                    'nip' => 'required|unique:users,nip',
-                    'nm_karyawan' => 'required|unique:users,name',
-                    'password' => 'required|min:8|max:16',
-                    'rePassword' => 'required|same:password',
-                ], $messages);
 
                 $input = $request->all();
 
@@ -72,11 +76,20 @@ class RegistrationController extends Controller
                 Alert::success('Registrasi Berhasil', 'Silahkan Login!');
                 return redirect('login');
             } else {
-                return back()->with('registerError', 'NIP dan Nama tidak terdaftar!');
+                Alert::error('Registrasi Gagal', 'NIP yang anda masukkan tidak terdaftar!');
+                return back();
+            }
+        } elseif (!empty($userNip) || $userNip == !null && !empty($userPass) || $userPass == !null) {
+            if ($request->nip === $userNip && $request->password === $userPass) {
+                Alert::error('Registrasi Gagal', 'NIP yang anda masukkan sudah memiliki, silahkan login!');
+                return redirect('login');
+            } else {
+                Alert::error('Registrasi Gagal', 'NIP yang anda masukkan sudah memiliki akun, silahkan login!');
+                return redirect('login');
             }
         } else {
-            Alert::error('Registrasi Gagal', 'Silahkan Registrasi Ulang!');
-            return redirect('register');
+            Alert::error('Registrasi Gagal', 'NIP yang anda masukkan tidak terdaftar di Perusahaan!');
+            return back();
         }
     }
 
@@ -108,12 +121,8 @@ class RegistrationController extends Controller
 
             return redirect(RouteServiceProvider::HOME)->with('success', 'Login Berhasil');
         }
-
-        // return back()->withErrors([
-        //     'email' => 'Email yang kamu masukan salah',
-        //     'password' => 'Password yang kamu masukan salah',
-        // ]);
-        return back()->with('loginError', 'Login failed!');
+        Alert::error('Login Gagal', 'NIP atau Password yang anda masukkan salah!');
+        return back()->withInput();
     }
 
     public function logout(Request $request)
