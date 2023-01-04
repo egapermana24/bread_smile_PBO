@@ -14,9 +14,9 @@
       </div>
       @endif
 
-      @can('create', $produkJadi)
-        <a href="{{ route('produkJadi.create') }}" class="btn btn-primary mb-3">Tambah</a>
-      @endcan
+      {{-- @can('create',$produkJadi) --}}
+      <a href="{{ route('produkJadi.create') }}" class="btn btn-primary mb-3">Tambah</a>
+      {{-- @endcan --}}
       <!-- agar tabel responsive -->
       <table class="table" id="datatable">
         <thead>
@@ -30,7 +30,7 @@
             <th>Harga Jual</th>
             <th>Keterangan</th>
             @can('update', $produkJadi)
-              <th>Aksi</th>
+            <th>Aksi</th>
             @endcan
           </tr>
         </thead>
@@ -47,37 +47,37 @@
             <td>{{ $produk->ket }}</td>
 
             @can('update', [$produkJadi, $produk] )
-              <td>
-                  <a href="{{ route('produkJadi.edit',$produk->kd_produk) }}" class="btn btn-sm btn-warning">Edit</a>
+            <td>
+              <a href="{{ route('produkJadi.edit',$produk->kd_produk) }}" class="btn btn-sm btn-warning">Edit</a>
 
-                  <form action="{{ route('produkJadi.destroy', $produk->kd_produk) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#hapus{{ $produk->kd_produk }}">
-                      Hapus
-                    </button>
-                    <!-- Modal -->
-                    <div class="modal fade" id="hapus{{ $produk->kd_produk }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">Apakah yakin ingin menghapus {{ $produk->nm_produk }} ?</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                            <p>Data yang dihapus tidak akan bisa dikembalikan!</p>
-                          </div>
-                          <div class="modal-footer mx-auto">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tidak</button>
-                            <button type="submit" class="btn btn-primary">Ya</button>
-                          </div>
-                        </div>
+              <form action="{{ route('produkJadi.destroy', $produk->kd_produk) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#hapus{{ $produk->kd_produk }}">
+                  Hapus
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="hapus{{ $produk->kd_produk }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">Apakah yakin ingin menghapus {{ $produk->nm_produk }} ?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Data yang dihapus tidak akan bisa dikembalikan!</p>
+                      </div>
+                      <div class="modal-footer mx-auto">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tidak</button>
+                        <button type="submit" class="btn btn-primary">Ya</button>
                       </div>
                     </div>
-                    <!-- end button trigger modal -->
-                  </form>
-              </td>
+                  </div>
+                </div>
+                <!-- end button trigger modal -->
+              </form>
+            </td>
             @endcan
 
           </tr>

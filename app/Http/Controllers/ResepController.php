@@ -60,71 +60,74 @@ class ResepController extends Controller
      */
     public function store(Request $request)
     {
-        // mengubah nama validasi
-        $messages = [
-            'kd_resep.required' => 'Kode Resep tidak boleh kosong',
-            'kd_produk.required' => 'Kode Produk tidak boleh kosong',
-            'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
-            'ket.required' => 'Keterangan tidak boleh kosong',
-        ];
-
-        // validasi form
-        $request->validate([
-            'kd_resep' => 'required',
-            'kd_produk' => 'required|unique:bread_smile,kd_produk',
-            'kd_bahan' => 'required',
-            'ket' => 'required',
-        ], $messages);
-
         $kd_produk = $request->kd_produk; //HARUS UNIQ
         $nm_bahan = $request->input('nm_bahan');
         $jumlah = $request->input('jumlah');
         $nm_satuan = $request->input('nm_satuan');
 
 
-        if ($jumlah == '' || $jumlah == null) {
-            Alert::error('Data Resep', 'Gagal ditambahakan!');
-            return redirect()->route('resep.create')->withInput();
-        }
 
-        if ($kd_produk == !null) {
-
-            // membersihkan nama bahan jika tidak ada jumlah
-            $nm_bahan = array_intersect_key($nm_bahan, $jumlah);
-
-            // menampilkan $nm_satuan berdasarkan $nm_bahan yang dipilih
-            $nm_satuan = array_intersect_key($nm_satuan, $nm_bahan, $jumlah);
-
-            // menghilangkan null pada array
-            $jumlah = array_intersect_key($jumlah, $nm_bahan);
-
-            // menggabungkan 2 array berdasarkan index yang sama dan ubah menjadi string
-            $bahan = array_map(function ($nm_bahan, $jumlah, $nm_satuan) {
-                return $nm_bahan . ' ' . '(' . $jumlah . ' ' . $nm_satuan . ')';
-            }, $nm_bahan, $jumlah, $nm_satuan);
-
-            // mengubah array menjadi string
-            $bahan = implode(', ', $bahan);
-
-            // masukkan ke database
-            Resep::create([
-                'kd_resep' => $request->kd_resep,
-                'kd_produk' => $kd_produk,
-                'bahan' => $bahan,
-            ]);
-
-            Alert::success('Data Resep', 'Berhasil ditambahakan!');
-            return redirect()->route('resep.index');
-        } elseif (htmlspecialchars(array_key_exists('nm_bahan', $request->input()))) {
+        if ($request->kd_produk == 0) {
             Alert::error('Data Resep', 'Gagal ditambahakan!');
             return redirect()->route('resep.create')->withInput();
         } else {
+            $messages = [
+                'kd_resep.required' => 'Kode Resep tidak boleh kosong',
+                'kd_produk.required' => 'Kode Produk tidak boleh kosong',
+                'nm_bahan.required' => 'Kode Bahan tidak boleh kosong',
+                'jumlah.required' => 'Jumlah tidak boleh kosong',
+                'nm_satuan.required' => 'Satuan tidak boleh kosong',
+            ];
+
+            $request->validate([
+                'kd_produk' => 'required',
+            ]);
+
+
+
+            if ($jumlah == '' || $jumlah == null) {
+                Alert::error('Data Resep', 'Gagal ditambahakan!');
+                return redirect()->route('resep.create')->withInput();
+            }
+
+            if ($kd_produk == !null) {
+
+                // membersihkan nama bahan jika tidak ada jumlah
+                $nm_bahan = array_intersect_key($nm_bahan, $jumlah);
+
+                // menampilkan $nm_satuan berdasarkan $nm_bahan yang dipilih
+                $nm_satuan = array_intersect_key($nm_satuan, $nm_bahan, $jumlah);
+
+                // menghilangkan null pada array
+                $jumlah = array_intersect_key($jumlah, $nm_bahan);
+
+                // menggabungkan 2 array berdasarkan index yang sama dan ubah menjadi string
+                $bahan = array_map(function ($nm_bahan, $jumlah, $nm_satuan) {
+                    return $nm_bahan . ' ' . '(' . $jumlah . ' ' . $nm_satuan . ')';
+                }, $nm_bahan, $jumlah, $nm_satuan);
+
+                // mengubah array menjadi string
+                $bahan = implode(', ', $bahan);
+
+                // masukkan ke database
+                Resep::create([
+                    'kd_resep' => $request->kd_resep,
+                    'kd_produk' => $kd_produk,
+                    'bahan' => $bahan,
+                ]);
+
+                Alert::success('Data Resep', 'Berhasil ditambahakan!');
+                return redirect()->route('resep.index');
+            } elseif (htmlspecialchars(array_key_exists('nm_bahan', $request->input()))) {
+                Alert::error('Data Resep', 'Gagal ditambahakan!');
+                return redirect()->route('resep.create')->withInput();
+            } else {
+                Alert::error('Data Resep', 'Gagal ditambahakan!');
+                return redirect()->route('resep.create')->withInput();
+            }
             Alert::error('Data Resep', 'Gagal ditambahakan!');
             return redirect()->route('resep.create')->withInput();
         }
-        Alert::error('Data Resep', 'Gagal ditambahakan!');
-        return redirect()->route('resep.create')->withInput();
-
 
 
 

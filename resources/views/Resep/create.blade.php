@@ -28,13 +28,9 @@
         <div class="form-group">
           <label for="kd_produk">Nama Produk</label>
           <select class="form-control" name="kd_produk" id="kd_produk">
-            <option disabled hidden selected>-- Pilih Produk --</option>
+            <option value="{{ 0 }}" hidden selected>-- Pilih Produk --</option>
             @foreach ($produkJadi as $produk)
-            @if (old('kd_produk') == $produk->kd_produk)
-            <option value="{{ $produk->kd_produk }}" selected>{{ $produk->nm_produk }}</option>
-            @else
             <option value="{{ $produk->kd_produk }}">{{ $produk->nm_produk }}</option>
-            @endif
             @endforeach
           </select>
         </div>
