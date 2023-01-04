@@ -39,22 +39,14 @@ class SatuanController extends Controller
 
         // mengubah error ke bahasa indonesia
         $messages = [
-            'required' => ':attribute tidak boleh kosong',
+            'required' => 'Nama satuan tidak boleh kosong',
+            'unique' => 'Nama satuan sudah ada',
         ];
-
-        $errors = [
-            'nm_satuan' => 'Nama Satuan',
-        ];
-
         // validasi data
         $request->validate([
-            'nm_satuan' => 'required',
-        ], $messages, $errors);
-
-
-
+            'nm_satuan' => 'required|unique:satuan,nm_satuan',
+        ], $messages);
         Satuan::create($request->all());
-
         Alert::success('Data Satuan', 'Berhasil Ditambahkan!');
         return redirect('satuan');
     }
@@ -88,11 +80,12 @@ class SatuanController extends Controller
         // mengubah nama validasi
         $messages = [
             'nm_satuan.required' => 'Nama Satuan tidak boleh kosong',
+            'nm_satuan.unique' => 'Nama Satuan sudah ada',
         ];
 
 
         $request->validate([
-            'nm_satuan' => 'required'
+            'nm_satuan' => 'required|unique:satuan,nm_satuan'
         ], $messages);
 
         $satuan->update($request->all());

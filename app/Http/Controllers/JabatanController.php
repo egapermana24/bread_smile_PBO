@@ -29,18 +29,14 @@ class JabatanController extends Controller
     {
         // mengubah error ke bahasa indonesia
         $messages = [
-            'required' => ':attribute tidak boleh kosong',
-        ];
-
-        $errors = [
-            'nm_jabatan' => 'Nama Jabatan',
+            'required' => 'Nama Jabatan tidak boleh kosong',
+            'unique' => 'Nama Jabatan sudah ada',
         ];
 
         // validasi data
         $request->validate([
-            'nm_jabatan' => 'required',
-        ], $messages, $errors);
-
+            'nm_jabatan' => 'required|unique:Jabatan,nm_jabatan',
+        ], $messages);
 
 
         Jabatan::create($request->all());
@@ -75,16 +71,13 @@ class JabatanController extends Controller
     {
         // mengubah error ke bahasa indonesia
         $messages = [
-            'required' => ':attribute tidak boleh kosong',
-        ];
-
-        $errors = [
-            'nm_jabatan' => 'Nama Jabatan',
+            'required' => 'Nama Jabatan tidak boleh kosong',
+            'unique' => 'Nama Jabatan sudah ada',
         ];
 
         $request->validate([
-            'nm_jabatan' => 'required'
-        ], $messages, $errors);
+            'nm_jabatan' => 'required|unique:Jabatan,nm_jabatan',
+        ], $messages);
 
         $jabatan->update($request->all());
         Alert::success('Data Jabatan', 'Berhasil diubah!');

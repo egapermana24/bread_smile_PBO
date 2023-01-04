@@ -20,9 +20,6 @@ class ProdukJadi extends Model
         'nm_produk',
         'stok',
         'kd_satuan',
-        'tgl_produksi',
-        'tgl_expired',
-        'modal',
         'harga_jual',
         'ket',
     ];

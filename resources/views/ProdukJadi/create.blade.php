@@ -42,20 +42,19 @@
             @endforeach
           </select>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="tgl_produksi">Tanggal Produksi</label>
           <input type="date" class="form-control" name="tgl_produksi" id="tgl_produksi">
         </div>
         <div class="form-group">
           <label for="tgl_expired">Tanggal Expired</label>
           <input type="date" class="form-control" name="tgl_expired" id="tgl_expired">
-        </div>
+        </div> -->
         <!-- modal -->
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="modal">Modal</label>
           <input type="number" class="form-control" name="modal" id="modal" placeholder="Masukkan Modal">
-        </div>
-        <!-- harga_jual -->
+        </div> -->
         <div class="form-group">
           <label for="harga_jual">Harga Jual</label>
           <input type="number" class="form-control" name="harga_jual" id="harga_jual" placeholder="Masukkan Harga Jual">

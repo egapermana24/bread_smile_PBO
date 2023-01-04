@@ -53,19 +53,22 @@ class ProdukJadiController extends Controller
         $messages = [
             'kd_produk.required' => 'Kode Produk tidak boleh kosong',
             'nm_produk.required' => 'Nama Produk tidak boleh kosong',
+            'stok.required' => 'Stok tidak boleh kosong',
+            'stok.integer' => 'Stok harus berupa angka',
             'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
             'harga_jual.required' => 'Harga Jual tidak boleh kosong',
-            'stok.required' => 'Stok tidak boleh kosong',
+            'harga_jual.integer' => 'Harga Jual harus berupa angka',
             'ket.required' => 'Keterangan tidak boleh kosong',
+            'ket.min' => 'Keterangan minimal 3 karakter',
         ];
 
         $request->validate([
             'kd_produk' => 'required',
             'nm_produk' => 'required',
+            'stok' => 'required|integer',
             'kd_satuan' => 'required',
-            'harga_jual' => 'required',
-            'stok' => 'required',
-            'ket' => 'required',
+            'harga_jual' => 'required|integer',
+            'ket' => 'required|min:3',
         ], $messages);
 
         ProdukJadi::create($request->all());
@@ -110,10 +113,6 @@ class ProdukJadiController extends Controller
             'stok.required' => 'Stok tidak boleh kosong',
             'stok.integer' => 'Stok harus berupa angka',
             'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
-            'tgl_produksi.required' => 'Tanggal Produksi tidak boleh kosong',
-            'tgl_expired.required' => 'Tanggal Expired tidak boleh kosong',
-            'modal.required' => 'Modal tidak boleh kosong',
-            'modal.integer' => 'Modal harus berupa angka',
             'harga_jual.required' => 'Harga Jual tidak boleh kosong',
             'harga_jual.integer' => 'Harga Jual harus berupa angka',
             'ket.required' => 'Keterangan tidak boleh kosong',
@@ -125,9 +124,6 @@ class ProdukJadiController extends Controller
             'nm_produk' => 'required',
             'stok' => 'required|integer',
             'kd_satuan' => 'required',
-            'tgl_produksi' => 'required',
-            'tgl_expired' => 'required',
-            'modal' => 'required|integer',
             'harga_jual' => 'required|integer',
             'ket' => 'required|min:3',
         ], $messages);

@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('ProdukMasuk', function (Blueprint $table) {
             $table->increments('id_produkMasuk');
             $table->string('kd_produk', 10);
-            $table->string('kd_bahan', 10);
+            $table->string('kd_resep');
+            $table->string('nip_karyawan');
             $table->integer('jumlah');
             $table->date('tgl_produksi');
             $table->date('tgl_expired');

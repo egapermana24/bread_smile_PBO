@@ -13,6 +13,7 @@ use App\Http\Controllers\ResepController;
 use App\Http\Controllers\SopirController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\ProdukMasukController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('mobil', MobilController::class);
     Route::resource('jabatan', JabatanController::class);
     Route::resource('karyawan', KaryawanController::class);
+    Route::resource('produkMasuk', ProdukMasukController::class);
 });
 
 

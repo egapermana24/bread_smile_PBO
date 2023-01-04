@@ -60,6 +60,21 @@ class ResepController extends Controller
      */
     public function store(Request $request)
     {
+        $messages = [
+            'kd_resep.required' => 'Kode Resep tidak boleh kosong',
+            'kd_produk.required' => 'Kode Produk tidak boleh kosong',
+            'nm_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'jumlah.required' => 'Jumlah tidak boleh kosong',
+            'nm_satuan.required' => 'Satuan tidak boleh kosong',
+        ];
+
+        $request->validate([
+            'kd_resep' => 'required',
+            'kd_produk' => 'required',
+            'nm_bahan' => 'array|required',
+            'jumlah' => 'array|required',
+            'nm_satuan' => 'array|required',
+        ], $messages);
         $kd_produk = $request->kd_produk; //HARUS UNIQ
         $nm_bahan = $request->input('nm_bahan');
         $jumlah = $request->input('jumlah');
@@ -71,17 +86,6 @@ class ResepController extends Controller
             Alert::error('Data Resep', 'Gagal ditambahakan!');
             return redirect()->route('resep.create')->withInput();
         } else {
-            $messages = [
-                'kd_resep.required' => 'Kode Resep tidak boleh kosong',
-                'kd_produk.required' => 'Kode Produk tidak boleh kosong',
-                'nm_bahan.required' => 'Kode Bahan tidak boleh kosong',
-                'jumlah.required' => 'Jumlah tidak boleh kosong',
-                'nm_satuan.required' => 'Satuan tidak boleh kosong',
-            ];
-
-            $request->validate([
-                'kd_produk' => 'required',
-            ]);
 
 
 

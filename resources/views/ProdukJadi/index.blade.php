@@ -24,9 +24,6 @@
             <th>Kode Produk</th>
             <th>Nama Produk</th>
             <th>Stok</th>
-            <th>Tanggal Produksi</th>
-            <th>Tanggal Expired</th>
-            <th>Modal</th>
             <th>Harga Jual</th>
             <th>Keterangan</th>
             @can('update', $produkJadi)
@@ -40,9 +37,9 @@
             <td>{{ $produk->kd_produk }}</td>
             <td>{{ $produk->nm_produk }}</td>
             <td>{{ $produk->stok }} {{ $produk->nm_satuan }}</td>
-            <td>{{ date('d F Y', strtotime($produk->tgl_produksi)) }}</td>
-            <td>{{ date('d F Y', strtotime($produk->tgl_expired)) }}</td>
-            <td>Rp. {{ number_format($produk->modal, 0, ',', '.') }}</td>
+            <!-- <td>{{-- date('dFY',strtotime($produk->tgl_produksi)) --}}</td>
+            <td>{{-- date('dFY',strtotime($produk->tgl_expired)) --}}</td>
+            <td>Rp. {{-- number_format($produk->modal,0,',','.') --}}</td> -->
             <td>Rp. {{ number_format($produk->harga_jual, 0, ',', '.') }}</td>
             <td>{{ $produk->ket }}</td>
 
