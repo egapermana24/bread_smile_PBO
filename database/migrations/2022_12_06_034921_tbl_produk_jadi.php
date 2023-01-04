@@ -18,9 +18,6 @@ return new class extends Migration
             $table->string('nm_produk', 50);
             $table->integer('stok');
             $table->string('kd_satuan', 10);
-            $table->date('tgl_produksi');
-            $table->date('tgl_expired');
-            $table->integer('modal');
             $table->integer('harga_jual');
             $table->string('ket');
 
