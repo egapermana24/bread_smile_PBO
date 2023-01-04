@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Karyawan;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RegistrationController extends Controller
 {
     public function index()
     {
+
+        $karyawan = Karyawan::all();
 
         return view(
             'auth.register',
@@ -19,71 +23,96 @@ class RegistrationController extends Controller
                 'judul' => '',
                 'menu' => '',
                 'submenu' => ''
-            ]
+            ],
+            compact('karyawan')
         );
     }
 
     public function store(Request $request)
     {
-
+        $karyawan = Karyawan::where('nip', $request->nip)->first();
+        $userNip = User::where('nip', $request->nip)->first();
+        $userPass = User::where('password', $request->password)->first();
         // mengubah nama validasi
         $messages = [
-            'name.required' => 'Nama tidak boleh kosong',
-            'name.min' => 'Nama minimal 3 karakter',
-            'name.max' => 'Nama maksimal 50 karakter',
-            'name.string' => 'Nama harus berupa huruf',
-            'email.required' => 'Email tidak boleh kosong',
-            'email.email' => 'Email tidak valid',
-            'email.unique' => 'Email sudah terdaftar',
+            'nip.required' => 'Nip tidak boleh kosong',
+            'nip.unique' => 'Nip ini sudah memiliki akun, silahkan login!',
+            'nm_karyawan.required' => 'Nama tidak boleh kosong',
+            'nm_karyawan.unique' => 'Nama sudah terdaftar',
             'password.required' => 'Password tidak boleh kosong',
             'password.min' => 'Password minimal 8 karakter',
             'password.max' => 'Password maksimal 16 karakter',
             'rePassword.required' => 'Konfirmasi Password tidak boleh kosong',
-            'rePassword.same' => 'Password tidak sama',
+            'rePassword.same' => 'Konfirmasi Password tidak sama'
         ];
 
         $request->validate([
-            'name' => 'required|string|min:3|max:50',
-            'email' => 'required|email|unique:users,email',
+            'nip' => 'required|unique:users,nip',
+            'nm_karyawan' => 'required',
             'password' => 'required|min:8|max:16',
             'rePassword' => 'required|same:password',
         ], $messages);
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
+        if (!empty($karyawan) || $karyawan == !null) {
 
-        User::create($input);
+            // cek apakah user itu terdaftar pada tabel karyawan
+            if ($request->nip === $karyawan->nip && $request->nm_karyawan === $karyawan->nm_karyawan) {
 
-        return redirect('login')->with('status', 'Registrasi Berhasil, Silahkan Login!');
+                $nip = $karyawan->nip;
+                $name = $karyawan->nm_karyawan;
+                $role = $karyawan->role;
+
+                $input = $request->all();
+
+                $input['password'] = bcrypt($input['password']);
+
+                User::create([
+                    'name' => $name,
+                    'nip' => $nip,
+                    'password' => $input['password'],
+                    'role' => $role
+                ]);
+
+                Alert::success('Registrasi Berhasil', 'Silahkan Login!');
+                return redirect('login');
+            } else {
+                Alert::error('Registrasi Gagal', 'NIP yang anda masukkan tidak terdaftar!');
+                return back();
+            }
+        } elseif (!empty($userNip) || $userNip == !null && !empty($userPass) || $userPass == !null) {
+            if ($request->nip === $userNip && $request->password === $userPass) {
+                Alert::error('Registrasi Gagal', 'NIP yang anda masukkan sudah memiliki, silahkan login!');
+                return redirect('login');
+            } else {
+                Alert::error('Registrasi Gagal', 'NIP yang anda masukkan sudah memiliki akun, silahkan login!');
+                return redirect('login');
+            }
+        } else {
+            Alert::error('Registrasi Gagal', 'NIP yang anda masukkan tidak terdaftar di Perusahaan!');
+            return back();
+        }
     }
 
     public function login()
     {
         return view(
-            'auth.login',
-            [
-                'tittle' => '',
-                'judul' => '',
-                'menu' => '',
-                'submenu' => ''
-            ]
+            'auth.login'
         );
     }
 
     public function loginStore(Request $request)
     {
         $messages = [
-            'email.required' => 'Email tidak boleh kosong',
-            'email.email' => 'Email tidak valid',
+            'nip.required' => 'NIP tidak boleh kosong',
             'password.required' => 'Password tidak boleh kosong',
         ];
 
         $request->validate([
-            'email' => 'required|email',
+            'nip' => 'required',
             'password' => 'required',
         ], $messages);
 
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('nip', 'password');
 
         // pesan error jika email dan password tidak sesuai dengan data di database
 
@@ -92,11 +121,8 @@ class RegistrationController extends Controller
 
             return redirect(RouteServiceProvider::HOME)->with('success', 'Login Berhasil');
         }
-
-        return back()->withErrors([
-            'email' => 'Email yang kamu masukan salah',
-            'password' => 'Password yang kamu masukan salah',
-        ]);
+        Alert::error('Login Gagal', 'NIP atau Password yang anda masukkan salah!');
+        return back()->withInput();
     }
 
     public function logout(Request $request)

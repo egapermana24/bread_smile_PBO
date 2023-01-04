@@ -11,8 +11,20 @@ use RealRashid\SweetAlert\Facades\Alert;
 class DataBahanController extends Controller
 {
 
+    // public function __construct()
+    // {
+    //     // $this->authorizeResource(DataBahan::class, [
+    //     //     'viewAny',
+    //     //     'create',
+    //     //     'update',
+    //     //     'delete'
+    //     // ]);
+    // }
+
     public function index()
     {
+
+        $this->authorize('viewAny', DataBahan::class);
 
         // join tabel dengan tabel satuan
         $dataBahan = DataBahan::join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')
@@ -26,6 +38,8 @@ class DataBahanController extends Controller
 
     public function create()
     {
+        $this->authorize('create', DataBahan::class);
+
         $kode = DataBahan::max('kd_bahan');
         $kode = (int) substr($kode, 3, 3);
         $kode = $kode + 1;
@@ -43,13 +57,30 @@ class DataBahanController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', DataBahan::class);
+
+        // mengubah nama validasi
+        $messages = [
+            'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'kd_bahan.min' => 'Kode Bahan minimal 3 karakter',
+            'kd_bahan.max' => 'Kode Bahan maksimal 10 karakter',
+            'nm_bahan.required' => 'Nama Bahan tidak boleh kosong',
+            'nm_bahan.min' => 'Nama Bahan minimal 3 karakter',
+            'nm_bahan.max' => 'Nama Bahan maksimal 50 karakter',
+            'harga_beli.required' => 'Harga Beli tidak boleh kosong',
+            'stok.required' => 'Stok tidak boleh kosong',
+            'stok.numeric' => 'Stok harus berupa angka',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+            'ket.min' => 'Keterangan minimal 3 karakter',
+        ];
+
         $request->validate([
             'kd_bahan' => 'required|min:3|max:10',
             'nm_bahan' => 'required|min:3|max:50',
             'harga_beli' => 'required',
             'stok' => 'required|numeric',
             'ket' => 'required|min:3',
-        ]);
+        ],  $messages);
 
         DataBahan::create($request->all());
 
@@ -65,6 +96,8 @@ class DataBahanController extends Controller
     public function edit(DataBahan $dataBahan)
     {
 
+        $this->authorize('update', $dataBahan);
+
         $dataBahan = DB::table('databahan')->join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')->select('databahan.*', 'satuan.nm_satuan')->where('kd_satuan', $dataBahan->kd_satuan)->first();
 
         $satuan = Satuan::all();
@@ -77,10 +110,12 @@ class DataBahanController extends Controller
 
     public function update(Request $request, DataBahan $dataBahan)
     {
+        $this->authorize('update', $dataBahan);
 
         // mengubah nama validasi
         $messages = [
             'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'nm_bahan.required' => 'Nama Bahan tidak boleh kosong',
             'nm_bahan.min' => 'Nama Bahan minimal 3 karakter',
             'nm_bahan.max' => 'Nama Bahan maksimal 50 karakter',
             'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
@@ -88,7 +123,7 @@ class DataBahanController extends Controller
             'harga_beli.integer' => 'Harga Beli harus berupa angka',
             'stok.required' => 'Stok tidak boleh kosong',
             'stok.integer' => 'Stok harus berupa angka',
-            'ket.min' => 'Keterangan tidak boleh kosong',
+            'ket.required' => 'Keterangan tidak boleh kosong',
             'ket.min' => 'Keterangan minimal 3 karakter',
         ];
 
@@ -110,6 +145,7 @@ class DataBahanController extends Controller
 
     public function destroy(DataBahan $dataBahan, Request $request)
     {
+        $this->authorize('delete', $dataBahan);
 
         $dataBahan->delete('kd_bahan', $request->kd_bahan);
         Alert::success('Data Bahan', 'Berhasil dihapus!');

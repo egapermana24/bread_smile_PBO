@@ -94,7 +94,7 @@
             <img src="{{ asset('Assets/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block">Administrator</a>
+            <a href="#" class="d-block">{{ auth()->user()->role }}</a>
           </div>
         </div>
 
@@ -102,165 +102,332 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            <!-- Add icons to the links using the .nav-icon class
-              with font-awesome or any other icon font library -->
+
+            {{-- dashboard --}}
             <li class="nav-item">
               <a href="/dashboard" class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Dashboard
-                  <!-- <span class="right badge badge-danger">New</span> -->
                 </p>
               </a>
             </li>
-            <li class="nav-item">
-              <a href="/jabatan" class="nav-link {{ Request::is('jabatan*') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Jabatan
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/karyawan" class="nav-link {{ Request::is('karyawan*') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Data Karyawan
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/satuan" class="nav-link {{ Request::is('satuan*') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Satuan Massa
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <!-- bahan baku -->
-              <a href="#" class="nav-link {{ Request::is('dataBahan*', 'bahanMasuk*', 'bahanKeluar*') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Bahan Baku
-                  <i class="fas fa-angle-left right"></i>
-                  <!-- <span class="badge badge-info right">6</span> -->
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/dataBahan" class="nav-link {{ Request::is('dataBahan*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Data Bahan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/bahanMasuk" class="nav-link {{ Request::is('bahanMasuk*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pembelian Bahan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/bahanKeluar" class="nav-link {{ Request::is('bahanKeluar*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pemakaian Bahan</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <!-- Produk -->
-              <a href="#" class="nav-link {{ Request::is('resep*', 'produkJadi*', 'produkMasuk*', 'produkKeluar*') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Produk
-                  <i class="fas fa-angle-left right"></i>
-                  <!-- <span class="badge badge-info right">6</span> -->
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/resep" class="nav-link {{ Request::is('resep*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Resep Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/produkJadi" class="nav-link {{ Request::is('produkJadi*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Data Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/produkMasuk" class="nav-link {{ Request::is('produkMasuk*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pembuatan Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/produkKeluar" class="nav-link {{ Request::is('produkKeluar*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Penjualan Produk</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <!-- Laporan -->
-              <a href="#" class="nav-link {{ Request::is('mobil*', 'sopir*') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Pengiriman
-                  <i class="fas fa-angle-left right"></i>
-                  <!-- <span class="badge badge-info right">6</span> -->
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/mobil" class="nav-link {{ Request::is('mobil*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Mobil</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/sopir" class="nav-link {{ Request::is('sopir*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Sopir</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <!-- Laporan -->
-              <a href="#" class="nav-link {{ Request::is('lapPermintaanBahan*', 'lapPermintaanProduk*', 'lapPengirimanProduk*') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Laporan
-                  <i class="fas fa-angle-left right"></i>
-                  <!-- <span class="badge badge-info right">6</span> -->
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/lapPermintaanBahan" class="nav-link {{ Request::is('lapPermintaanBahan*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Permintaan Bahan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/lapPermintaanProduk" class="nav-link {{ Request::is('lapPermintaanProduk*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Permintaan Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/lapPengirimanProduk" class="nav-link {{ Request::is('lapPengirimanProduk*') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pengiriman Produk</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
+
+            @can('backoffice')
+            
+            {{-- data jabatan --}}
+              <li class="nav-item">
+                <a href="/jabatan" class="nav-link {{ Request::is('jabatan*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Jabatan
+                  </p>
+                </a>
+              </li>
+
+              {{-- data karyawan --}}
+              <li class="nav-item">
+                <a href="/karyawan" class="nav-link {{ Request::is('karyawan*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Data Karyawan
+                  </p>
+                </a>
+              </li>
+
+              {{-- data satuan massa --}}
+              <li class="nav-item">
+                <a href="/satuan" class="nav-link {{ Request::is('satuan*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Satuan Massa
+                  </p>
+                </a>
+              </li>
+              
+              {{-- menu bahan baku --}}
+              <li class="nav-item">
+                <a href="#" class="nav-link {{ Request::is('dataBahan*', 'bahanMasuk*', 'bahanKeluar*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Bahan Baku
+                    <i class="fas fa-angle-left right"></i>
+                    <!-- <span class="badge badge-info right">6</span> -->
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+
+                  {{-- data bahan --}}
+                  <li class="nav-item">
+                    <a href="/dataBahan" class="nav-link {{ Request::is('dataBahan*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Data Bahan</p>
+                    </a>
+                  </li>
+
+                  {{-- data pembelian bahan --}}
+                  <li class="nav-item">
+                    <a href="/bahanMasuk" class="nav-link {{ Request::is('bahanMasuk*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Pembelian Bahan</p>
+                    </a>
+                  </li>
+
+                  {{-- data pemakaian bahan --}}
+                  <li class="nav-item">
+                    <a href="/bahanKeluar" class="nav-link {{ Request::is('bahanKeluar*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Pemakaian Bahan</p>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
+
+              {{-- menu produk --}}
+              <li class="nav-item">
+                <a href="#" class="nav-link {{ Request::is('resep*', 'produkJadi*', 'produkMasuk*', 'produkKeluar*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Produk
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+
+                  {{-- data resep produk --}}
+                  <li class="nav-item">
+                    <a href="/resep" class="nav-link {{ Request::is('resep*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Resep Produk</p>
+                    </a>
+                  </li>
+
+                  {{-- data produk --}}
+                  <li class="nav-item">
+                    <a href="/produkJadi" class="nav-link {{ Request::is('produkJadi*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Data Produk</p>
+                    </a>
+                  </li>
+
+                  {{-- data pembuatan produk --}}
+                  <li class="nav-item">
+                    <a href="/produkMasuk" class="nav-link {{ Request::is('produkMasuk*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Pembuatan Produk</p>
+                    </a>
+                  </li>
+
+                  {{-- data penjualan produk --}}
+                  <li class="nav-item">
+                    <a href="/produkKeluar" class="nav-link {{ Request::is('produkKeluar*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Penjualan Produk</p>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
+
+              {{-- menu pengiriman --}}
+              <li class="nav-item">
+                <a href="#" class="nav-link {{ Request::is('mobil*', 'sopir*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Pengiriman
+                    <i class="fas fa-angle-left right"></i>
+                    <!-- <span class="badge badge-info right">6</span> -->
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+
+                  {{-- data pengiriman --}}
+                  <li class="nav-item">
+                    <a href="/dataPengiriman" class="nav-link {{ Request::is('dataPengiriman*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Data Pengiriman</p>
+                    </a>
+                  </li>
+
+                  {{-- data mobil --}}
+                  <li class="nav-item">
+                    <a href="/mobil" class="nav-link {{ Request::is('mobil*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Mobil</p>
+                    </a>
+                  </li>
+
+                  {{-- data sopir --}}
+                  <li class="nav-item">
+                    <a href="/sopir" class="nav-link {{ Request::is('sopir*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Sopir</p>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
+
+              {{-- menu laporan --}}
+              <li class="nav-item">
+                <a href="#" class="nav-link {{ Request::is('lapPermintaanBahan*', 'lapPermintaanProduk*', 'lapPengirimanProduk*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Laporan
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+
+                  <li class="nav-item">
+                    <a href="/lapPermintaanBahan" class="nav-link {{ Request::is('lapPermintaanBahan*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Permintaan Bahan</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="/lapPermintaanProduk" class="nav-link {{ Request::is('lapPermintaanProduk*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Permintaan Produk</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="/lapPengirimanProduk" class="nav-link {{ Request::is('lapPengirimanProduk*') ? 'active' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Pengiriman Produk</p>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
+
+            @endcan
+
+            {{-- @can('gudang', App\Models\DataBahan::class) --}}
+
+            @can('gudang')
+
+            {{-- data satuan massa --}}
+              <li class="nav-item">
+                <a href="/satuan" class="nav-link {{ Request::is('satuan*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Satuan Massa
+                  </p>
+                </a>
+              </li>
+
+              {{-- data bahan --}}
+              <li class="nav-item">
+                <a href="/dataBahan" class="nav-link {{ Request::is('dataBahan*') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Data Bahan</p>
+                </a>
+              </li>
+
+              {{-- data pembelian bahan --}}
+              <li class="nav-item">
+                <a href="/bahanMasuk" class="nav-link {{ Request::is('bahanMasuk*') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pembelian Bahan</p>
+                </a>
+              </li>
+
+              {{-- data pemakaian bahan --}}
+              <li class="nav-item">
+                <a href="/bahanKeluar" class="nav-link {{ Request::is('bahanKeluar*') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pemakaian Bahan</p>
+                </a>
+              </li>
+              
+            @endcan
+            
+            @can('produksi')
+
+              {{-- data satuan massa --}}
+              <li class="nav-item">
+                <a href="/satuan" class="nav-link {{ Request::is('satuan*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Satuan Massa
+                  </p>
+                </a>
+              </li>
+
+              {{-- data resep produk --}}
+              <li class="nav-item">
+                <a href="/resep" class="nav-link {{ Request::is('resep*') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Resep Produk</p>
+                </a>
+              </li>
+
+              {{-- data produk --}}
+              <li class="nav-item">
+                <a href="/produkJadi" class="nav-link {{ Request::is('produkJadi*') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Data Produk</p>
+                </a>
+              </li>
+
+              {{-- data pembuatan produk --}}
+              <li class="nav-item">
+                <a href="/produkMasuk" class="nav-link {{ Request::is('produkMasuk*') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pembuatan Produk</p>
+                </a>
+              </li>
+
+              {{-- data penjualan produk --}}
+              <li class="nav-item">
+                <a href="/produkKeluar" class="nav-link {{ Request::is('produkKeluar*') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Penjualan Produk</p>
+                </a>
+              </li>
+
+            @endcan
+            
+            @can('distribusi')
+
+              {{-- data produk --}}
+              <li class="nav-item">
+                <a href="/produkJadi" class="nav-link {{ Request::is('produkJadi*') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>Data Produk</p>
+                </a>
+              </li>
+
+              {{-- data pengiriman --}}
+              <li class="nav-item">
+                <a href="/dataPengiriman" class="nav-link {{ Request::is('dataPengiriman*') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Data Pengiriman</p>
+                </a>
+              </li>
+
+              {{-- data mobil --}}
+              <li class="nav-item">
+                <a href="/mobil" class="nav-link {{ Request::is('mobil*') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Data Mobil</p>
+                </a>
+              </li>
+
+              {{-- data sopir --}}
+              <li class="nav-item">
+                <a href="/sopir" class="nav-link {{ Request::is('sopir*') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Data Sopir</p>
+                </a>
+              </li>
+
+            @endcan
+            
           </ul>
         </nav>
         <!-- /.sidebar-menu -->

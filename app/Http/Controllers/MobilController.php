@@ -10,6 +10,8 @@ class MobilController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Mobil::class);
+
         // kode otomatis
         $kode = Mobil::max('kd_mobil');
         $kode = (int) substr($kode, 4, 4);
@@ -39,12 +41,23 @@ class MobilController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', Mobil::class);
+
+        // mengubah nama validasi
+        $messages = [
+            'kd_mobil.required' => 'Kode Mobil tidak boleh kosong',
+            'merk.required' => 'Merk tidak boleh kosong',
+            'plat_nomor.required' => 'Plat Nomor tidak boleh kosong',
+            'plat_nomor.unique' => 'Plat Nomor sudah terdaftar',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+        ];
+
         $request->validate([
             'kd_mobil' => 'required',
             'merk' => 'required',
             'plat_nomor' => 'required|unique:mobil,plat_nomor',
             'ket' => 'required'
-        ]);
+        ], $messages);
 
         Mobil::create($request->all());
 
@@ -60,6 +73,8 @@ class MobilController extends Controller
 
     public function edit(Mobil $mobil)
     {
+        $this->authorize('update', $mobil);
+
         return view(
             'mobil.edit',
             compact('mobil'),
@@ -74,6 +89,17 @@ class MobilController extends Controller
 
     public function update(Request $request, Mobil $mobil)
     {
+        $this->authorize('update', $mobil);
+
+        // mengubah nama validasi
+        $messages = [
+            'kd_mobil.required' => 'Kode Mobil tidak boleh kosong',
+            'merk.required' => 'Merk tidak boleh kosong',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+            'plat_nomor.required' => 'Plat Nomor tidak boleh kosong',
+            'plat_nomor.unique' => 'Plat Nomor sudah terdaftar',
+        ];
+
         $rules = [
             'kd_mobil' => 'required',
             'merk' => 'required',
@@ -84,7 +110,7 @@ class MobilController extends Controller
             $rules['plat_nomor'] = 'required|unique:mobil,plat_nomor';
         };
 
-        $validateData = $request->validate($rules);
+        $validateData = $request->validate($rules, $messages);
         $mobil->update($validateData);
         Alert::success('Data Mobil', 'Berhasil diubah!');
         return redirect('mobil');
@@ -92,6 +118,8 @@ class MobilController extends Controller
 
     public function destroy(Mobil $mobil)
     {
+        $this->authorize('delete', $mobil);
+
         Mobil::destroy($mobil->kd_mobil);
         Alert::success('Data Mobil', 'Berhasil dihapus!');
         return redirect('mobil');

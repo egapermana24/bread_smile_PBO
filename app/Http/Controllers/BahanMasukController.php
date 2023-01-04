@@ -13,6 +13,8 @@ class BahanMasukController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny', BahanMasuk::class);
+
         // join table bahan masuk dan data bahan
         $bahanMasuk = BahanMasuk::join('dataBahan', 'bahanMasuk.kd_bahan', '=', 'dataBahan.kd_bahan')->join('satuan', 'dataBahan.kd_satuan', '=', 'satuan.id_satuan')
             ->select('bahanMasuk.*', 'dataBahan.nm_bahan', 'dataBahan.kd_satuan', 'dataBahan.harga_beli', 'satuan.nm_satuan')
@@ -35,6 +37,8 @@ class BahanMasukController extends Controller
 
     public function create()
     {
+        $this->authorize('create', BahanMasuk::class);
+
         // join dengan tabel satuan
         $dataBahan = DataBahan::join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')
             ->select('databahan.*', 'satuan.nm_satuan')
@@ -55,6 +59,8 @@ class BahanMasukController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', BahanMasuk::class);
+
         // stok bahan bertambah
         $stok = DataBahan::where('kd_bahan', $request->kd_bahan)->first();
         $stok->stok = $stok->stok + $request->jumlah;
@@ -67,13 +73,22 @@ class BahanMasukController extends Controller
         // mencari total harga
         $total = $harga_beli * $jumlah;
 
+        // mengubah nama validasi
+        $messages = [
+            'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+            'nm_bahan.required' => 'Nama Bahan tidak boleh kosong',
+            'tgl_masuk.required' => 'Tanggal Masuk tidak boleh kosong',
+            'jumlah.required' => 'Jumlah tidak boleh kosong',
+            'ket.required' => 'Keterangan tidak boleh kosong',
+        ];
+
         $request->validate([
             'kd_bahan' => 'required',
             'nm_bahan' => 'required',
             'tgl_masuk' => 'required',
             'jumlah' => 'required',
             'ket' => 'required',
-        ]);
+        ], $messages);
 
         BahanMasuk::create([
             'kd_bahan' => $request->kd_bahan,
@@ -98,6 +113,7 @@ class BahanMasukController extends Controller
 
     public function edit(bahanMasuk $bahanMasuk)
     {
+        $this->authorize('update', $bahanMasuk);
 
         // join tabel satuan
         $dataBahan = DataBahan::join('satuan', 'databahan.kd_satuan', '=', 'satuan.id_satuan')
@@ -121,6 +137,7 @@ class BahanMasukController extends Controller
 
     public function update(Request $request, bahanMasuk $bahanMasuk)
     {
+        $this->authorize('update', $bahanMasuk);
 
         // cek apakah bahannya di ubah
         if ($request->has('kd_bahan')) {
@@ -139,12 +156,21 @@ class BahanMasukController extends Controller
             $harga_beli = (int) $stok->harga_beli;
             $jumlah = (int) $request->jumlah;
 
+            // mengubah nama validasi
+            $messages = [
+                'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+                'jumlah.required' => 'Jumlah tidak boleh kosong',
+                'tgl_masuk.required' => 'Tanggal Masuk tidak boleh kosong',
+                'ket.required' => 'Keterangan tidak boleh kosong',
+                'ket.min' => 'Keterangan minimal 3 karakter',
+            ];
+
             $request->validate([
                 'kd_bahan' => 'required',
                 'jumlah' => 'required',
                 'tgl_masuk' => 'required',
                 'ket' => 'required|min:3',
-            ]);
+            ], $messages);
 
             $input = $request->all();
 
@@ -157,12 +183,21 @@ class BahanMasukController extends Controller
             Alert::success('Data Pembelian', 'Berhasil diubah!');
             return redirect('bahanMasuk');
         } else {
+            // mengubah nama validasi
+            $messages = [
+                'kd_bahan.required' => 'Kode Bahan tidak boleh kosong',
+                'jumlah.required' => 'Jumlah tidak boleh kosong',
+                'tgl_masuk.required' => 'Tanggal Masuk tidak boleh kosong',
+                'ket.required' => 'Keterangan tidak boleh kosong',
+                'ket.min' => 'Keterangan minimal 3 karakter',
+            ];
+
             $request->validate([
                 'kd_bahan' => 'required',
                 'jumlah' => 'required',
                 'tgl_masuk' => 'required',
                 'ket' => 'required|min:3',
-            ]);
+            ], $messages);
 
             if ($request->has('jumlah')) {
 
@@ -198,6 +233,8 @@ class BahanMasukController extends Controller
 
     public function destroy(bahanMasuk $bahanMasuk)
     {
+        $this->authorize('delete', $bahanMasuk);
+
         // update stok bahan
         $stok = DataBahan::where('kd_bahan', $bahanMasuk->kd_bahan)->first();
         $stok->stok = $stok->stok - $bahanMasuk->jumlah;

@@ -21,6 +21,7 @@ class Karyawan extends Model
         'ttl',
         'no_telp',
         'alamat',
+        'role',
         'foto'
     ];
 }
