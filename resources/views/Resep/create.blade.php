@@ -30,11 +30,7 @@
           <select class="form-control" name="kd_produk" id="kd_produk">
             <option disabled hidden selected>-- Pilih Produk --</option>
             @foreach ($produkJadi as $produk)
-            @if (old('kd_produk') == $produk->kd_produk)
-            <option value="{{ $produk->kd_produk }}" selected>{{ $produk->nm_produk }}</option>
-            @else
             <option value="{{ $produk->kd_produk }}">{{ $produk->nm_produk }}</option>
-            @endif
             @endforeach
           </select>
         </div>

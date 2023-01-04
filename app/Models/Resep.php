@@ -17,6 +17,7 @@ class Resep extends Model
 
     protected $fillable = [
         'kd_resep',
-        'kd_bahan',
+        'kd_produk',
+        'bahan',
     ];
 }

@@ -19,13 +19,10 @@ class ResepController extends Controller
      */
     public function index()
     {
-        // join tabel dengan produkJadi dan dataBahan
-        // $resep = Resep::join('produkJadi', 'resep.kd_produk', '=', 'produkJadi.kd_produk')
-        //     ->join('databahan', 'resep.kd_bahan', '=', 'databahan.kd_bahan')
-        //     ->select('resep.*', 'produkJadi.nm_produk', 'databahan.nm_bahan')
-        //     ->get();
-
-        $resep = Resep::all();
+        // join dengan tabel produkJadi
+        $resep = Resep::join('produkJadi', 'resep.kd_produk', '=', 'produkJadi.kd_produk')
+            ->select('resep.*', 'produkJadi.nm_produk')
+            ->get();
         return view('resep.index', ['resep' => $resep], ['tittle' => 'Data Resep', 'judul' => 'Data Resep', 'menu' => 'Resep', 'submenu' => 'Data Resep']);
     }
 
@@ -63,19 +60,28 @@ class ResepController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->kd_produk == '' || $request->nm_bahan == '' || $request->jumlah == '' || $request->nm_satuan == '') {
-            Alert::error('Data Resep', 'Gagal ditambahakan!');
-            return redirect()->route('resep.create')->withInput();
-        }
+        $request->validate([
+            'kd_produk' => 'required|unique:bread_smile,kd_produk',
+        ]);
 
-        $kd_produk = $request->kd_produk;
+        $kd_produk = $request->kd_produk; //HARUS UNIQ
         $nm_bahan = $request->input('nm_bahan');
         $jumlah = $request->input('jumlah');
         $nm_satuan = $request->input('nm_satuan');
 
+
+        if ($jumlah == '' || $jumlah == null) {
+            Alert::error('Data Resep', 'Gagal ditambahakan!');
+            return redirect()->route('resep.create')->withInput();
+        }
+
         if ($kd_produk == !null) {
+
+            // membersihkan nama bahan jika tidak ada jumlah
+            $nm_bahan = array_intersect_key($nm_bahan, $jumlah);
+
             // menampilkan $nm_satuan berdasarkan $nm_bahan yang dipilih
-            $nm_satuan = array_intersect_key($nm_satuan, $nm_bahan);
+            $nm_satuan = array_intersect_key($nm_satuan, $nm_bahan, $jumlah);
 
             // menghilangkan null pada array
             $jumlah = array_intersect_key($jumlah, $nm_bahan);
@@ -88,7 +94,15 @@ class ResepController extends Controller
             // mengubah array menjadi string
             $bahan = implode(', ', $bahan);
 
-            dd($bahan);
+            // masukkan ke database
+            Resep::create([
+                'kd_resep' => $request->kd_resep,
+                'kd_produk' => $kd_produk,
+                'bahan' => $bahan,
+            ]);
+
+            Alert::success('Data Resep', 'Berhasil ditambahakan!');
+            return redirect()->route('resep.index');
         } elseif (htmlspecialchars(array_key_exists('nm_bahan', $request->input()))) {
             Alert::error('Data Resep', 'Gagal ditambahakan!');
             return redirect()->route('resep.create')->withInput();

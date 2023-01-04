@@ -17,20 +17,16 @@
       <table class="table" id="datatable">
         <thead>
           <tr>
-            <th>Kode Resep</th>
-            <!-- <th>Nama Produk</th> -->
+            <th>Resep</th>
             <th>Bahan-bahan</th>
-            <!-- <th>Keterangan</th> -->
             <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
           @foreach ($resep as $r)
           <tr>
-            <td>{{ $r->kd_resep }}</td>
-            <!-- <td>{{ $r->kd_produk }}</td> -->
-            <td>{{ $r->kd_bahan }}</td>
-            <!-- <td>{{ $r->ket }}</td> -->
+            <td>{{ $r->nm_produk }}</td>
+            <td>{{ $r->bahan }}</td>
             <td>
               <a href="" class="btn btn-sm btn-warning">Edit</a>
               <form action="{{ route('resep.destroy', $r->kd_resep) }}" method="POST">
