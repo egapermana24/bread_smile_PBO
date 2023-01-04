@@ -30,7 +30,11 @@
           <select class="form-control" name="kd_produk" id="kd_produk">
             <option disabled hidden selected>-- Pilih Produk --</option>
             @foreach ($produkJadi as $produk)
+            @if (old('kd_produk') == $produk->kd_produk)
+            <option value="{{ $produk->kd_produk }}" selected>{{ $produk->nm_produk }}</option>
+            @else
             <option value="{{ $produk->kd_produk }}">{{ $produk->nm_produk }}</option>
+            @endif
             @endforeach
           </select>
         </div>
@@ -38,6 +42,7 @@
         <br>
         <span class="text-danger">*ceklis bahan yang dipilih</span>
         @foreach ($dataBahan as $bahan )
+<<<<<<< HEAD
         <div class="input-group mb-2">
           <div class="input-group-text">
             <input class="form-check-input mt-0" type="checkbox" value="{{ $bahan->nm_bahan }}" name="nm_bahan[]">
@@ -46,6 +51,13 @@
           <input type="number" class="form-control" placeholder="jumlah" value="{{ old('jumlah') }}" name="jumlah[]">
           <input type="text" class="form-control" value="{{ $bahan->nm_satuan }}" readonly name="nm_satuan[]">
 
+=======
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="{{ $bahan->kd_bahan, old('kd_bahan[]') }}" name="kd_bahan[]">
+          <label class="form-check-label">
+            {{ $bahan->nm_bahan }}
+          </label>
+>>>>>>> main
         </div>
         @endforeach
         <button type="submit" class="btn btn-primary mb-3">Simpan</button>
