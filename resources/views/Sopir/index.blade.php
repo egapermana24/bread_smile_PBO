@@ -46,7 +46,7 @@
                     @foreach ($sopir as $spr)
                     <tr>
                         <td>
-                            <img src="{{ asset('images/'.$spr->foto) }}" height="100px">
+                            <img class="img-thumbnail mx-auto d-block" src="{{ asset('images/'.$spr->foto) }}" style="height: 100px;">
                         </td>
                         <td>{{ $spr->kd_sopir }}</td>
                         <td>{{ $spr->no_ktp }}</td>

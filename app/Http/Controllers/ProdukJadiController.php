@@ -6,6 +6,7 @@ use App\Models\ProdukJadi;
 use Illuminate\Http\Request;
 use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ProdukJadiController extends Controller
@@ -60,6 +61,9 @@ class ProdukJadiController extends Controller
             'harga_jual.integer' => 'Harga Jual harus berupa angka',
             'ket.required' => 'Keterangan tidak boleh kosong',
             'ket.min' => 'Keterangan minimal 3 karakter',
+            'foto.required' => 'Foto tidak boleh kosong',
+            'foto.image' => 'File yang anda pilih bukan foto atau gambar',
+            'foto.mimes' => 'File atau Foto harus berupa jpeg,png,jpg,gif,svg,webp',
         ];
 
         $request->validate([
@@ -69,9 +73,19 @@ class ProdukJadiController extends Controller
             'kd_satuan' => 'required',
             'harga_jual' => 'required|integer',
             'ket' => 'required|min:3',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
         ], $messages);
 
-        ProdukJadi::create($request->all());
+        $input = $request->all();
+
+        if ($image = $request->file('foto')) {
+            $destinationPath = 'images/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['foto'] = "$profileImage";
+        }
+
+        ProdukJadi::create($input);
 
         Alert::success('Data Produk', 'Berhasil Ditambahkan!');
         return redirect('produkJadi');
@@ -106,38 +120,87 @@ class ProdukJadiController extends Controller
     {
         $this->authorize('update', $produkJadi);
 
-        // mengubah nama validasi
-        $messages = [
-            'kd_produk.required' => 'Kode Produk tidak boleh kosong',
-            'nm_produk.required' => 'Nama Produk tidak boleh kosong',
-            'stok.required' => 'Stok tidak boleh kosong',
-            'stok.integer' => 'Stok harus berupa angka',
-            'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
-            'harga_jual.required' => 'Harga Jual tidak boleh kosong',
-            'harga_jual.integer' => 'Harga Jual harus berupa angka',
-            'ket.required' => 'Keterangan tidak boleh kosong',
-            'ket.min' => 'Keterangan minimal 3 karakter',
-        ];
+        // cek apakah user mengganti foto atau tidak
+        if ($request->has('foto')) {
+            $produkJadi = ProdukJadi::find($produkJadi->kd_produk);
+            File::delete('images/' . $produkJadi->foto);
 
-        $request->validate([
-            'kd_produk' => 'required',
-            'nm_produk' => 'required',
-            'stok' => 'required|integer',
-            'kd_satuan' => 'required',
-            'harga_jual' => 'required|integer',
-            'ket' => 'required|min:3',
-        ], $messages);
+            // mengubah nama validasi
+            $messages = [
+                'kd_produk.required' => 'Kode Produk tidak boleh kosong',
+                'nm_produk.required' => 'Nama Produk tidak boleh kosong',
+                'stok.required' => 'Stok tidak boleh kosong',
+                'stok.integer' => 'Stok harus berupa angka',
+                'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
+                'harga_jual.required' => 'Harga Jual tidak boleh kosong',
+                'harga_jual.integer' => 'Harga Jual harus berupa angka',
+                'ket.required' => 'Keterangan tidak boleh kosong',
+                'ket.min' => 'Keterangan minimal 3 karakter',
+                'foto.required' => 'Foto tidak boleh kosong',
+                'foto.image' => 'File yang anda pilih bukan foto atau gambar',
+                'foto.mimes' => 'File atau Foto harus berupa jpeg,png,jpg,gif,svg,webp',
+            ];
 
-        $produkJadi->update($request->all());
-        Alert::success('Data Produk', 'Berhasil diubah!');
-        return redirect('produkJadi');
+            $rules = [
+                'kd_produk' => 'required',
+                'nm_produk' => 'required',
+                'stok' => 'required|integer',
+                'kd_satuan' => 'required',
+                'harga_jual' => 'required|integer',
+                'ket' => 'required|min:3',
+                'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
+            ];
+
+            $input = $request->validate($rules, $messages);
+
+            if ($image = $request->file('foto')) {
+                $destinationPath = 'images/';
+                $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $image->move($destinationPath, $profileImage);
+                $input['foto'] = "$profileImage";
+            }
+
+            $produkJadi->update($input);
+
+            Alert::success('Data Produk', 'Berhasil Diubah!');
+            return redirect('produkJadi');
+        } else {
+            // mengubah nama validasi
+            $messages = [
+                'kd_produk.required' => 'Kode Produk tidak boleh kosong',
+                'nm_produk.required' => 'Nama Produk tidak boleh kosong',
+                'stok.required' => 'Stok tidak boleh kosong',
+                'stok.integer' => 'Stok harus berupa angka',
+                'kd_satuan.required' => 'Kode Satuan tidak boleh kosong',
+                'harga_jual.required' => 'Harga Jual tidak boleh kosong',
+                'harga_jual.integer' => 'Harga Jual harus berupa angka',
+                'ket.required' => 'Keterangan tidak boleh kosong',
+                'ket.min' => 'Keterangan minimal 3 karakter',
+            ];
+
+            $rules = [
+                'kd_produk' => 'required',
+                'nm_produk' => 'required',
+                'stok' => 'required|integer',
+                'kd_satuan' => 'required',
+                'harga_jual' => 'required|integer',
+                'ket' => 'required|min:3',
+            ];
+
+            $input = $request->validate($rules, $messages);
+
+            $produkJadi->update($input);
+            Alert::success('Data Produk', 'Berhasil diubah!');
+            return redirect('produkJadi');
+        }
     }
 
     public function destroy(ProdukJadi $produkJadi)
     {
         $this->authorize('delete', $produkJadi);
 
-        ProdukJadi::destroy($produkJadi->kd_produk);
+        File::delete('images/' . $produkJadi->foto);
+        $produkJadi->delete();
         Alert::success('Data Produk', 'Berhasil dihapus!');
         return redirect('produkJadi');
     }

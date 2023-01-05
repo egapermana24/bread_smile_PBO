@@ -53,6 +53,7 @@ class SopirController extends Controller
     {
         $this->authorize('create', Sopir::class);
 
+
         // mengubah nama validasi
         $messages = [
             'kd_sopir.required' => 'Kode Sopir tidak boleh kosong',
@@ -60,22 +61,22 @@ class SopirController extends Controller
             'nm_sopir.min' => 'Nama Sopir minimal 3 karakter',
             'nm_sopir.max' => 'Nama Sopir maksimal 50 karakter',
             'no_ktp.required' => 'Nomor KTP tidak boleh kosong',
+            'no_ktp.numeric' => 'Nomor KTP harus berupa angka',
             'no_ktp.min' => 'Nomor KTP minimal 16 karakter',
             'no_ktp.max' => 'Nomor KTP maksimal 16 karakter',
             'no_ktp.unique' => 'Nomor KTP sudah terdaftar',
-            'no_ktp.numeric' => 'Nomor KTP harus berupa angka',
             'jenis_kelamin.required' => 'Jenis Kelamin tidak boleh kosong',
             'alamat.required' => 'Alamat tidak boleh kosong',
             'alamat.min' => 'Alamat minimal 3 karakter',
             'foto.required' => 'Foto tidak boleh kosong',
-            'foto.images' => 'File yang anda pilih bukan foto atau gambar',
+            'foto.image' => 'File yang anda pilih bukan foto atau gambar',
             'foto.mimes' => 'File atau Foto harus berupa jpeg,png,jpg,gif,svg,webp',
         ];
 
         $request->validate([
             'kd_sopir' => 'required',
             'nm_sopir' => 'required|min:3|max:50',
-            'no_ktp' => 'required|min:16|max:16|unique:sopir,no_ktp|numeric',
+            'no_ktp' => 'required|unique:sopir,no_ktp|max:16|min:16|numeric',
             'jenis_kelamin' => 'required',
             'alamat' => 'required|min:3',
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp'
@@ -128,6 +129,24 @@ class SopirController extends Controller
             // hapus foto lama
             $sopir = Sopir::find($id);
             File::delete('images/' . $sopir->foto);
+            // mengubah nama validasi
+            $messages = [
+                'kd_sopir.required' => 'Kode Sopir tidak boleh kosong',
+                'nm_sopir.required' => 'Nama Sopir tidak boleh kosong',
+                'nm_sopir.min' => 'Nama Sopir minimal 3 karakter',
+                'nm_sopir.max' => 'Nama Sopir maksimal 50 karakter',
+                'jenis_kelamin.required' => 'Jenis Kelamin tidak boleh kosong',
+                'alamat.required' => 'Alamat tidak boleh kosong',
+                'alamat.min' => 'Alamat minimal 3 karakter',
+                'no_ktp.required' => 'Nomor KTP tidak boleh kosong',
+                'no_ktp.min' => 'Nomor KTP minimal 16 karakter',
+                'no_ktp.max' => 'Nomor KTP maksimal 16 karakter',
+                'no_ktp.unique' => 'Nomor KTP sudah terdaftar',
+                'no_ktp.numeric' => 'Nomor KTP harus berupa angka',
+                'foto.required' => 'Foto tidak boleh kosong',
+                'foto.images' => 'File yang anda pilih bukan foto atau gambar',
+                'foto.mimes' => 'File atau Foto harus berupa jpeg,png,jpg,gif,svg,webp',
+            ];
             $rules = [
                 'kd_sopir' => 'required',
                 'nm_sopir' => 'required|min:3|max:50',
@@ -140,7 +159,7 @@ class SopirController extends Controller
                 $rules['no_ktp'] = 'required|min:16|max:16|unique:sopir,no_ktp|numeric';
             };
 
-            $input = $request->validate($rules);
+            $input = $request->validate($rules, $messages);
 
             if ($image = $request->file('foto')) {
                 $destinationPath = 'images/';

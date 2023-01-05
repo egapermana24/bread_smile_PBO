@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('kd_satuan', 10);
             $table->integer('harga_jual');
             $table->string('ket');
+            $table->text('foto');
 
             $table->timestamps();
         });

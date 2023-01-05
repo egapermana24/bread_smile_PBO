@@ -21,19 +21,23 @@
       <table class="table" id="datatable">
         <thead>
           <tr>
+            <th>Gambar Produk</th>
             <th>Kode Produk</th>
             <th>Nama Produk</th>
             <th>Stok</th>
             <th>Harga Jual</th>
             <th>Keterangan</th>
-            @can('update', $produkJadi)
+            {{-- @can('update',$produkJadi) --}}
             <th>Aksi</th>
-            @endcan
+            {{-- @endcan --}}
           </tr>
         </thead>
         <tbody>
           @foreach ($produkJadi as $produk)
           <tr>
+            <td>
+              <img class="img-thumbnail mx-auto d-block" src="{{ asset('images/'.$produk->foto) }}" style="height: 100px;">
+            </td>
             <td>{{ $produk->kd_produk }}</td>
             <td>{{ $produk->nm_produk }}</td>
             <td>{{ $produk->stok }} {{ $produk->nm_satuan }}</td>
@@ -43,7 +47,7 @@
             <td>Rp. {{ number_format($produk->harga_jual, 0, ',', '.') }}</td>
             <td>{{ $produk->ket }}</td>
 
-            @can('update', [$produkJadi, $produk] )
+            {{-- @can('update',[$produkJadi,$produk]) --}}
             <td>
               <a href="{{ route('produkJadi.edit',$produk->kd_produk) }}" class="btn btn-sm btn-warning">Edit</a>
 
@@ -75,7 +79,7 @@
                 <!-- end button trigger modal -->
               </form>
             </td>
-            @endcan
+            {{-- @endcan --}}
 
           </tr>
           @endforeach

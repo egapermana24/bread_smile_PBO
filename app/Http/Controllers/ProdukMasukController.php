@@ -18,7 +18,7 @@ class ProdukMasukController extends Controller
      */
     public function index()
     {
-       
+
         $this->authorize('viewAny', ProdukMasuk::class);
 
         // join table produkMasuk dengan produkJadi
@@ -75,16 +75,6 @@ class ProdukMasukController extends Controller
     {
         $this->authorize('create', ProdukJadi::class);
 
-        $nip = auth()->user()->nip;
-
-
-        $resep = Resep::where('kd_produk', $request->kd_produk)->get();
-        $resep = $resep->first()->kd_resep;
-
-        // stok bahan bertambah
-        $stok = ProdukJadi::where('kd_produk', $request->kd_produk)->first();
-        $stok->stok = $stok->stok + $request->jumlah;
-        $stok->save();
 
         // mengubah nama validasi
         $messages = [
@@ -106,6 +96,25 @@ class ProdukMasukController extends Controller
             'jumlah' => 'required|numeric',
             'ket' => 'required',
         ], $messages);
+
+        $nip = auth()->user()->nip;
+
+        $namaProduk = ProdukJadi::where('kd_produk', $request->kd_produk)->first();
+
+
+        if ($request->kd_resep == null) {
+            Alert::warning('Resep untuk Produk ini belum tersedia', 'Silahkan tambahkan resep terlebih dahulu!');
+            return redirect('resep');
+        } else {
+            $resep = Resep::where('kd_produk', $request->kd_produk)->get();
+            $resep = $resep->first()->kd_resep;
+        }
+
+
+        // stok bahan bertambah
+        $stok = ProdukJadi::where('kd_produk', $request->kd_produk)->first();
+        $stok->stok = $stok->stok + $request->jumlah;
+        $stok->save();
 
         ProdukMasuk::create([
             'kd_produk' => $request->kd_produk,

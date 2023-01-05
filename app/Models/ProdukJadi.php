@@ -22,5 +22,6 @@ class ProdukJadi extends Model
         'kd_satuan',
         'harga_jual',
         'ket',
+        'foto',
     ];
 }

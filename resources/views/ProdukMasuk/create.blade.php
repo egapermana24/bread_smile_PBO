@@ -60,7 +60,7 @@
 
         <div class="form-group">
           <label for="modal">Modal</label>
-          <input type="number" class="form-control @error('jumlah') is-invalid @enderror" name="modal" id="modal" value="{{ old('modal') }}">
+          <input type="number" class="form-control @error('jumlah') is-invalid @enderror" name="modal" id="modal" value="{{ old('modal') }}" required>
           @error('modal')
           <div class="col-12 text-danger mt-2 mx-1">
             {{ $message }}
