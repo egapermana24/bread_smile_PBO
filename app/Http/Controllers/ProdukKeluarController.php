@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProdukJadi;
+use App\Models\ProdukKeluar;
 use App\Models\ProdukMasuk;
 use App\Models\Resep;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-use Carbon\Carbon;
 
-class ProdukMasukController extends Controller
+class ProdukKeluarController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,24 +18,23 @@ class ProdukMasukController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', ProdukKeluar::class);
 
-        $this->authorize('viewAny', ProdukMasuk::class);
-
-        // join table produkMasuk dengan produkJadi
-        $produkMasuk = ProdukMasuk::join('produkJadi', 'produkMasuk.kd_produk', '=', 'produkJadi.kd_produk')->join('satuan', 'produkJadi.kd_satuan', '=', 'satuan.id_satuan')->join('users', 'produkMasuk.nip_karyawan', '=', 'users.nip')->join('resep', 'produkMasuk.kd_resep', '=', 'resep.kd_resep')->select('produkMasuk.*', 'produkJadi.nm_produk', 'produkJadi.kd_satuan', 'satuan.nm_satuan', 'users.name', 'resep.bahan')
+        // join table produkKeluar dengan produkJadi
+        $produkKeluar = ProdukKeluar::join('produkJadi', 'produkKeluar.kd_produk', '=', 'produkJadi.kd_produk')->join('satuan', 'produkJadi.kd_satuan', '=', 'satuan.id_satuan')->join('users', 'produkKeluar.nip_karyawan', '=', 'users.nip')->join('produkMasuk', 'produkKeluar.kd_produk', '=', 'produkMasuk.kd_produk')->select('produkKeluar.*', 'produkJadi.nm_produk', 'produkJadi.kd_satuan', 'satuan.nm_satuan', 'users.name', 'produkMasuk.tgl_expired')
             ->get();
 
         // ambil nama karyawan dari session
         $nama = session('name');
         // mengirim tittle dan judul ke view
         return view(
-            'produkMasuk.index',
-            ['produkMasuk' => $produkMasuk, 'nama' => $nama],
+            'produkKeluar.index',
+            ['produkKeluar' => $produkKeluar, 'nama' => $nama],
             [
-                'tittle' => 'Pembuatan Produk',
-                'judul' => 'Pembuatan Produk',
+                'tittle' => 'Penjualan Produk',
+                'judul' => 'Penjualan Produk',
                 'menu' => 'Produk',
-                'submenu' => 'Pembuatan Produk'
+                'submenu' => 'Penjualan Produk'
             ]
         );
     }
@@ -47,18 +46,18 @@ class ProdukMasukController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', ProdukMasuk::class);
+        $this->authorize('create', ProdukKeluar::class);
         // join dengan tabel satuan
         $produkJadi = ProdukJadi::join('satuan', 'produkJadi.kd_satuan', '=', 'satuan.id_satuan')
             ->select('produkJadi.*', 'satuan.nm_satuan')
             ->get();
 
         return view(
-            'produkMasuk.create',
+            'produkKeluar.create',
             ['produkJadi' => $produkJadi],
             [
                 'tittle' => 'Tambah Data',
-                'judul' => 'Tambah Pembuatan Produk',
+                'judul' => 'Tambah Penjualan Produk',
                 'menu' => 'Produk Jadi',
                 'submenu' => 'Tambah Data'
             ]
@@ -73,16 +72,12 @@ class ProdukMasukController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', ProdukMasuk::class);
-
+        $this->authorize('create', ProdukKeluar::class);
 
         // mengubah nama validasi
         $messages = [
             'kd_produk.required' => 'Kode Produk Harus Diisi',
-            'tgl_produksi.required' => 'Tanggal Produksi Harus Diisi',
-            'tgl_expired.required' => 'Tanggal Expired Harus Diisi',
-            'modal.required' => 'Modal Harus Diisi',
-            'modal.numeric' => 'Modal Harus Angka',
+            'tgl_keluar.required' => 'Tanggal Keluar Harus Diisi',
             'jumlah.required' => 'Jumlah Harus Diisi',
             'jumlah.numeric' => 'Jumlah Harus Angka',
             'ket.required' => 'Keterangan Harus Diisi',
@@ -90,9 +85,7 @@ class ProdukMasukController extends Controller
 
         $request->validate([
             'kd_produk' => 'required',
-            'tgl_produksi' => 'required',
-            'tgl_expired' => 'required',
-            'modal' => 'required|numeric',
+            'tgl_keluar' => 'required',
             'jumlah' => 'required|numeric',
             'ket' => 'required',
         ], $messages);
@@ -109,35 +102,35 @@ class ProdukMasukController extends Controller
 
         // stok bahan bertambah
         $stok = ProdukJadi::where('kd_produk', $request->kd_produk)->first();
-        $stok->stok = $stok->stok + $request->jumlah;
+        $stok->stok = $stok->stok - $request->jumlah;
         $stok->save();
 
-        $total = $request->modal * $request->jumlah;
+        $harga_jual = ProdukJadi::where('kd_produk', $request->kd_produk)->first()->harga_jual;
 
-        ProdukMasuk::create([
+        $total = $harga_jual * $request->jumlah;
+
+        ProdukKeluar::create([
             'kd_produk' => $request->kd_produk,
-            'kd_resep' => $resep,
             'nip_karyawan' => $nip,
-            'tgl_produksi' => $request->tgl_produksi,
-            'tgl_expired' => $request->tgl_expired,
-            'modal' => $request->modal,
+            'tgl_keluar' => $request->tgl_keluar,
+            'harga_jual' => $harga_jual,
             'jumlah' => $request->jumlah,
             'total' => $total,
             'ket' => $request->ket,
         ]);
 
 
-        Alert::success('Data Pembuatan Produk', 'Berhasil Ditambahkan!');
-        return redirect('produkMasuk');
+        Alert::success('Data Penjualan Produk', 'Berhasil Ditambahkan!');
+        return redirect('produkKeluar');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ProdukMasuk  $produkMasuk
+     * @param  \App\Models\ProdukKeluar  $produkKeluar
      * @return \Illuminate\Http\Response
      */
-    public function show(ProdukMasuk $produkMasuk)
+    public function show(ProdukKeluar $produkKeluar)
     {
         //
     }
@@ -145,10 +138,10 @@ class ProdukMasukController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ProdukMasuk  $produkMasuk
+     * @param  \App\Models\ProdukKeluar  $produkKeluar
      * @return \Illuminate\Http\Response
      */
-    public function edit(ProdukMasuk $produkMasuk)
+    public function edit(ProdukKeluar $produkKeluar)
     {
         //
     }
@@ -157,10 +150,10 @@ class ProdukMasukController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProdukMasuk  $produkMasuk
+     * @param  \App\Models\ProdukKeluar  $produkKeluar
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProdukMasuk $produkMasuk)
+    public function update(Request $request, ProdukKeluar $produkKeluar)
     {
         //
     }
@@ -168,22 +161,11 @@ class ProdukMasukController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ProdukMasuk  $produkMasuk
+     * @param  \App\Models\ProdukKeluar  $produkKeluar
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProdukMasuk $produkMasuk)
+    public function destroy(ProdukKeluar $produkKeluar)
     {
-        $this->authorize('delete', $produkMasuk);
-
-        // update stok produk jadi
-        $stok = ProdukJadi::where('kd_produk', $produkMasuk->kd_produk)->first();
-        $stok->stok = $stok->stok - $produkMasuk->jumlah;
-        $stok->save();
-
-        $produkMasuk->delete();
-        Alert::success('Data Pembuatan Produk', 'Berhasil Dihapus!');
-        return redirect('produkMasuk');
+        //
     }
 }
-
-// cara translate bulan dari bahasa inggris ke bahasa indonesia di laravel

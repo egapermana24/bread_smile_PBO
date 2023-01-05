@@ -60,6 +60,10 @@ class ResepController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->kd_produk == "0") {
+            Alert::error('Data Resep', 'Gagal ditambahakan!');
+            return redirect()->route('resep.create')->withInput();
+        }
         $messages = [
             'kd_resep.required' => 'Kode Resep tidak boleh kosong',
             'kd_produk.required' => 'Kode Produk tidak boleh kosong',

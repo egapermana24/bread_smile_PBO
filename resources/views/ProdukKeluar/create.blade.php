@@ -6,7 +6,7 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-11">
-      <form action="{{ route('produkMasuk.store') }}" method="POST">
+      <form action="{{ route('produkKeluar.store') }}" method="POST">
         @csrf
 
         <div class="form-group">
@@ -64,29 +64,9 @@
         </div>
 
         <div class="form-group">
-          <label for="modal">Modal</label>
-          <input type="number" class="form-control @error('jumlah') is-invalid @enderror" name="modal" id="modal" value="{{ old('modal') }}" required>
-          @error('modal')
-          <div class="col-12 text-danger mt-2 mx-1">
-            {{ $message }}
-          </div>
-          @enderror
-        </div>
-
-        <div class="form-group">
-          <label for="tgl_produksi">Tanggal Produksi</label>
-          <input type="date" class="form-control @error('tgl_produksi') is-invalid @enderror" name="tgl_produksi" id="tgl_produksi" value="{{ old('tgl_produksi') }}" required>
-          @error('tgl_produksi')
-          <div class="text-danger mt-2 mx-1">
-            {{ $message }}
-          </div>
-          @enderror
-        </div>
-
-        <div class="form-group">
-          <label for="tgl_expired">Tanggal Expired</label>
-          <input type="date" class="form-control @error('tgl_expired') is-invalid @enderror" name="tgl_expired" id="tgl_expired" value="{{ old('tgl_expired') }}" required>
-          @error('tgl_expired')
+          <label for="tgl_keluar">Tanggal Keluar</label>
+          <input type="date" class="form-control @error('tgl_keluar') is-invalid @enderror" name="tgl_keluar" id="tgl_keluar" value="{{ old('tgl_keluar') }}" required>
+          @error('tgl_keluar')
           <div class="text-danger mt-2 mx-1">
             {{ $message }}
           </div>
